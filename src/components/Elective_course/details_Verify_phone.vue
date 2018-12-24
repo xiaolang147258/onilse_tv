@@ -14,13 +14,13 @@
       
       <p class="ipone_name">手机号码</p>
       <div class="iphone_box">
-      	    <input v-model="iphone_value" type="tel" id="iphone" placeholder="请输入手机号码" />
+      	    <input @blur="inp_show" v-model="iphone_value" type="tel" id="iphone" placeholder="请输入手机号码" />
       	    <button @click="hqyan" v-if="btn_show" class="iphone_btn">获取验证码</button>
       	    <button style="background:#EAEAEA;color:#C5B2AB;" v-else class="iphone_btn">获取验证码</button>
       </div> 
       <p class="yan_p">验证码</p>
       <div class="iphone_box">
-      	    <input style="width: 2.773333rem;"  v-model="yan_value" type="tel" id="iphone" placeholder="请输入验证码" />
+      	    <input @blur="inp_show" style="width: 2.773333rem;"  v-model="yan_value" type="tel" id="iphone" placeholder="请输入验证码" />
       	    <button @click="tj_click" style="float:left;margin-left:0.266666rem;" v-if="yan_value&&iphone_value" class="iphone_btn">提交</button>
       	    <button style="background:#EAEAEA;color:#C5B2AB;float:left;margin-left:0.266666rem;" v-else class="iphone_btn">提交</button>
       </div>
@@ -45,6 +45,10 @@ export default {
   	
   },
   methods:{
+  	inp_show(){
+  		$("html, body").animate({scrollTop:0});  
+  	},
+  	
   	tj_click(){//提交按钮被点击
   		 
   		router.push({

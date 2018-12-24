@@ -1,12 +1,16 @@
 <template>
-  <div id="hello" style="width:100%;background:#FFFFFF;border-top: 0.013333rem solid #DEDEDE;padding-bottom: 1.306rem;">
+  <div id="hello" style="width:100%;background:#FFFFFF;border-top: 0.013333rem solid #DEDEDE;padding-bottom: 1.306rem;padding-top: 1.633333rem;">
+
+   
 <!--顶部导航滑动区---------------------------------------------------------------------------------------------------> 
+    <div id="tit_box">
       <div id="titles">
       	  <van-tabs @click='tab_click' style=''>
                 <van-tab  v-for="index in 8" :title="'标签 ' + index" ></van-tab>
          </van-tabs>
       </div>
-      
+    </div>   
+  <div v-if="tab_lei">    
 <!--轮播区域---------------------------------------------------------------------------------------------------->  
       <div style="width:100%;height:4.566666rem;">
       	  <div class="swiper-container">
@@ -29,7 +33,7 @@
       	   	   	     <p class="tabs_title_titles_p1">十万个为什么|故事全集</p>
       	   	   	     <p class="tabs_title_titles_p2">打开新世界的大门，了解更多的知识</p>
       	   	   	     
-      	   	   	    <p style="margin-top: 0.533333rem;"><img class="tabs_title_titles_p_img" src="../../../static/img/bofng.png"/>
+      	   	   	    <p style="margin-top:0.4rem;height:0.4rem;line-height:0.43rem;"><img class="tabs_title_titles_p_img" src="../../../static/img/bofng.png"/>
       	   	   	        <a class="tabs_title_titles_p_a">8.8万</a>
       	   	   	    </p>
       	   	   	     
@@ -37,12 +41,24 @@
       	   	   </div>
       	   </div>
       </div>
-      
-      <div style="width:100%;height:0.906666rem;background:#F0F0F0;text-align:center;line-height:0.906rem;font-size:0.32rem;color:#999999">
+    </div>
+    <div v-else>
+        <div class="tabs_title" v-for="index in 3">
+      	   	   <div class="tabs_title_img"></div>
+      	   	   <div class="tabs_title_titles">
+      	   	   	     <p class="tabs_title_titles_p1">十万个为什么|故事全集</p>
+      	   	   	     <p class="tabs_title_titles_p2">打开新世界的大门，了解更多的知识</p>
+      	   	   	    <p style="margin-top:0.4rem;height:0.4rem;line-height:0.43rem;"><img class="tabs_title_titles_p_img" src="../../../static/img/bofng.png"/>
+      	   	   	        <a class="tabs_title_titles_p_a">8.8万</a>
+      	   	   	    </p>
+      	   	   	     <div @click="go_det" class="tabs_title_titles_btn">去学习</div>
+      	   	   </div>
+        </div>
+    </div>
+    
+      <div style="width:100%;height:0.906666rem;background:#F0F0F0;text-align:center;line-height:0.906rem;font-size:0.32rem;color:#999999;margin-top: 0.466666rem;">
       	 已经是最底部了~
       </div>
-      
-      
       
   </div>
 </template>
@@ -56,9 +72,10 @@ import 'swiper/dist/css/swiper.min.css';
 export default {
 	
   data () {
-  	
     return {
-    	  
+    	   tab_lei:true,
+    	   
+    	   
     }
   },
   computed:{
@@ -85,10 +102,15 @@ export default {
   	
   	tab_click(index,title){//顶部导航栏 任一项被点击点击
   		  console.log(index,title)
+  		  this.tab_lei = index!=0?false:true
+  		  if(this.tab_lei){
+  		  	 location.reload()
+  		  }
   	},
   	
   	git_swiper(){//初始化swiper
   		   var mySwiper = new Swiper('.swiper-container',{
+  		   	  loop:true,
             effect :'coverflow',
               slidesPerView: 1.2,
               centeredSlides: true,
@@ -99,7 +121,10 @@ export default {
                 modifier: 3,
                 slideShadows : false
             },
+            observer:true,//修改swiper自己或子元素时，自动初始化swiper
+            observeParents:true,//修改swiper的父元素时，自动初始化swiper
         })
+  		   
   	},
   	
   
@@ -110,6 +135,7 @@ export default {
   	  store.state.bottom = 'Elective course'
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
   	  this.git_swiper()
+  	  
   }
 }
 </script>
@@ -117,12 +143,12 @@ export default {
 <style scoped>
 	.tabs_title_titles_p_a{
 		  color: #C5B2AB;
-		  font-size: 0.293333rem;
+		  font-size: 0.3rem;
 		  margin-left: 0.15rem;
 	}
 	.tabs_title_titles_p_img{
 		 width: 0.373333rem;
-		 height: 0.373333rem;
+		 height: 0.4rem;
 		 float: left;
 	}
 	.tabs_title_titles_btn{
@@ -155,6 +181,7 @@ export default {
       overflow: hidden;
        text-overflow:ellipsis;
        white-space: nowrap;
+       font-weight: bold;
 	}
 	.tabs_title_titles{
 		 height: 100%;
@@ -212,7 +239,7 @@ export default {
 	.swiper-slide{
 		background:#007AFF;
 		border-radius:0.066666rem;height: 4.23rem;
-		   -moz-box-shadow:0em 1em 1em #BDBDBD; -webkit-box-shadow:0em 1em 1em #BDBDBD; box-shadow:0em 0.4em 1em #BDBDBD;
+		-moz-box-shadow:0em 1em 1em #BDBDBD; -webkit-box-shadow:0em 1em 1em #BDBDBD; box-shadow:0em 0.4em 1em #BDBDBD;
 	}
 	.swiper-container {
     width: 100%;
@@ -220,16 +247,20 @@ export default {
 }  
 	 #titles{
 	 	  width:95%;
-	 	  height: 1.333333rem;
+	 	  height: 1.233333rem;
 	 	  margin: 0 auto;
 	 	  margin-top: 0.1333rem;
 	 	  /*background:honeydew;*/
 	 	  padding:0.13333rem 0;
+	 	  
 	 }
-	
-	
- .demo-button {
-     
-  }
-
+	 #tit_box{
+	 	  width: 100%;
+	 	  position:fixed;
+	 	  top: 0;
+	 	  left: 0;
+	 	  background: white;
+	 	  z-index: 500;
+	 	  border-bottom:0.013333rem solid #F0F0F0;
+	 }
 </style>

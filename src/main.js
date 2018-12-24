@@ -30,6 +30,11 @@ import 'vant/lib/index.css';
 import { Tab, Tabs } from 'vant';
 Vue.use(Tab).use(Tabs);
 
+import { Uploader } from 'vant';
+Vue.use(Uploader);
+
+
+
 import Swiper from 'swiper'; 
 import 'swiper/dist/css/swiper.min.css';
 

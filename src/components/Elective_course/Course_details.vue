@@ -1,6 +1,6 @@
 <template>
   <!--课程详情-->
-  <div id="hello" style="width:100%;float: left;padding-bottom: 1.606666rem;">
+  <div id="hello" style="width:100%;float:left;padding-bottom: 1.606666rem;">
   	 
      <div class="top_title">冲向太空游乐园，和星星月亮一起玩耍</div>
 <!--视频播放器---------------------------------------------------------------------------------------------------------------------------->    	 
@@ -85,12 +85,13 @@
     <div class="logins">查看更多评论…</div>    
 <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->  
 
-<img @click="to_top" class="ding" src="../../../static/img/zhiding.png" alt="" />
-
+<mu-scale-transition>
+  <img v-show="to_top_show" @click="to_top" class="ding" src="../../../static/img/zhiding.png" alt="" />
+</mu-scale-transition>
 
 <!--底部购买||评论栏----------------------------------------------------------------------------------------------------->     
   <!--用户购买后展示--> 
-   <div v-show="false" @touchmove.prevent class="pin_btn">
+   <div v-if="true" @touchmove.prevent class="pin_btn">
     	   <div class="pin_btn_zi">
     	   	   <img src="../../../static/img/xixun.png" alt="" />
     	   	   <p>咨询</p>
@@ -102,7 +103,7 @@
     	   <div @click="show1=true" class="right_btn">发表评论</div>
     </div>
   <!--用户未购买时展示-->  
-    <div v-show="true" @touchmove.prevent class="pin_btn">
+    <div v-else @touchmove.prevent class="pin_btn">
     	   <div class="pin_btn_zi">
     	   	   <img src="../../../static/img/xixun.png" alt="" />
     	   	   <p>咨询</p>
@@ -127,7 +128,7 @@
               	  	   <a class="meng_pin_top_xing"><van-rate v-model="values1" /></a><p class="meng_pin_top_p">满意</p>
               	  </div>
               	 <div style="width:6.866666rem;margin: 0 auto;">
-              	     <textarea v-show="show1" placeholder="想说点什么呢！,200字以内" class="texts" v-model="text_val" onkeydown="if(event.keyCode==32||event.keyCode==13){return false;}" maxlength="200" rows="" cols=""></textarea> 
+              	     <textarea @blur="inp_show" v-show="show1" placeholder="想说点什么呢！,200字以内" class="texts" v-model="text_val" onkeydown="if(event.keyCode==32||event.keyCode==13){return false;}" maxlength="200" rows="" cols=""></textarea> 
               	 </div>
               	 
               	 <div class="meng_pin_bto">
@@ -154,6 +155,8 @@ export default {
   
   data () {
     return {
+    	to_top_show:false,
+    	
     	text_val:'',//评论框内容
     	
     	show1:false,
@@ -186,7 +189,7 @@ export default {
         }
     },
     
-    vid:'q0011iyvdam',//m0532apqki0
+    vid:'m0532apqki0',//q0011iyvdam
     
    }
   },
@@ -194,8 +197,11 @@ export default {
   	
   },
   methods:{
+  	inp_show(){
+  		$("html, body").animate({scrollTop:$("html, body").height()});  
+  	},
   	to_buy(){//点击购买btn ==> 判断用户是否绑定有手机号码，
-  		 
+  		 this.destroyed()
   		 router.push({
   		 	   path:'/details_Verify_phone'
   		 })
@@ -206,20 +212,22 @@ export default {
   	this.aws2_index = index 
   },
   
-// destroyed (){//移除页面监听--跳转其他页面务必调用该事件
-//         window.removeEventListener('scroll', this.handleScroll)
-//},
-//
-//handleScroll(){//监测滑动
-//  var a = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-//  var offsetTop = document.querySelector('.tv_box_tab').offsetTop
-//  if(a<offsetTop){
-//  	  this.tit_index = 1
-//  }
-//},
+   destroyed (){//移除页面监听--跳转其他页面务必调用该事件
+           window.removeEventListener('scroll', this.handleScroll)
+},
+handleScroll(){//监测滑动
+    var a = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    var offsetTop = document.querySelector('.tv_box_tab').offsetTop
+    if(a<offsetTop){
+    	   this.to_top_show = false
+    }else{
+    	   this.to_top_show = true
+    }
+},
   
   to_top(){//回顶部
   	$("html, body").animate({scrollTop:0});  
+//	this.to_top_show = false
   },
   
   tvboxclick(index){//控制页面滑动到指定位置
@@ -231,7 +239,6 @@ export default {
   	 	 let height_s = $('#videoCon').height()+$('.tv_box_bto1').height()+$('.to_tv_numder').height()+$('.tv_box_tab').height()+$('#aws1').height()+$('#aws2').height()
        $("html, body").animate({scrollTop: height_s});  
   	 }
-  	 
   },
   
   to_tv(){//更换视频，需要重新初始化播放器
@@ -249,10 +256,10 @@ export default {
     player.addParam("autoplay","0");//是否自动播放，1为自动播放，0为不自动播放
 	  player.addParam("wmode","opaque");
 	  player.addParam("showend",0);
-	  player.addParam("adplay",0);  
+	  player.addParam("adplay",0); 
 	  player.addParam("wmode","transparent");
     player.addParam("pic","");//默认图片地址
-    player.addParam("flashskin", "http://imgcache.qq.com/minivideo_v1/vd/res/skins/TencentPlayerMiniSkin.swf");//是否调用精简皮肤，不使用则删掉此行代码
+    player.addParam("flashskin","http://imgcache.qq.com/minivideo_v1/vd/res/skins/TencentPlayerMiniSkin.swf");//是否调用精简皮肤，不使用则删掉此行代码
     player.write("videoCon");
     $('video').attr("webkit-playsinline",'true');//限制ios下自动全屏播放
   	$('video').attr("playsinline",'true');
@@ -263,8 +270,8 @@ export default {
   	  this.tv_git()
   	  store.state.btn_show = false;
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
-//    window.addEventListener('scroll',this.handleScroll);
-      $("html, body").animate({scrollTop:0});  
+      window.addEventListener('scroll',this.handleScroll);
+      $("html, body").animate({scrollTop:0});
   }
 }
 </script>
