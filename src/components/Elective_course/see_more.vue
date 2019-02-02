@@ -1,56 +1,114 @@
 <template>
 	<!--点击查看更多 --课程列表页面-->
   <div id="hello" style="width:100%;background:white;float: left;">
-  	  
-      <div class="titles" v-for="(i,index) in 5">
-      	  <img class="titles_img" src="../../../static/img/b_bb.png" alt="" />
+  	  <mu-scale-transition>
+  	  <div v-for="(i,index) in active" v-show="dal">
+      <div  class="titles" >
+      	
+      	 <div v-show="img_shows==false" id="login_box">
+      	 	<img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
+      	 </div>
+      	 <mu-scale-transition> 
+      	    <div v-show="img_shows" style="width: 100%;height: 100%;">
+      	       <img @load="img_shows=true" class="titles_img" :src="i.pic" alt="" />
+      	    </div>
+      	 </mu-scale-transition>
+      	 
       	  <div class="titles_val_box">
-      	  	 <img src="../../../static/img/b_bb.png" alt="" />  
+      	  	 <img :src="i.pic" alt="" />  
       	  	 <div class="titles_val_box_box">
-      	  	 	 <p>冲向太空游乐园，和星星月亮一起玩耍</p>
-      	  	 	 <div @click="to_Course_details" class="titles_val_box_box_btn">去学习</div>
+      	  	 	 <p>{{i.title}}</p>
+      	  	 	 <div @click="to_Course_details(i)" class="titles_val_box_box_btn">去学习</div>
       	  	 </div>
       	  </div>
       </div>
-      
-    <div style="float: left;margin-top:0.4rem;width:100%;height:0.906666rem;background:#F0F0F0;text-align:center;line-height:0.906rem;font-size:0.32rem;color:#999999">
+     </div> 
+     </mu-scale-transition>
+     
+     <div v-show="active.length>6" style="float: left;margin-top:0.4rem;width:100%;height:0.906666rem;background:#F0F0F0;text-align:center;line-height:0.906rem;font-size:0.32rem;color:#999999">
       	 已经是最底部了~
-      </div>           
-   
+     </div>           
+    
   </div>
 </template>
 
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
 export default {
   
-  data () {
-    return {
-    	
+  data (){
+    return{
+    	active:[],
+    	dal:false,
+    	img_shows:false,
     }
   },
   computed:{
   	
   },
   methods:{
-  	  to_Course_details(){//跳转至课程详情
+  	  git_act(){
+  	  	    const loading = this.$loading({
+  	  	      color:'#FEE045',
+  	  	      text:'加载中...'
+  	        });
+  		  	axios.get(store.state.urls+'api/videos/data?id=1'
+        	      ).then(res=>{
+        	      	 if(res.data.code==200){
+        	      	 	  
+        	      	 	  this.active = res.data.data.data;
+        	      	 	  console.log(this.active,'首页视频列表数据');
+        	      	 	  this.dal = true;
+	  	    	          loading.close();
+	  	                  
+        	      	 }else{
+        	      	 	
+        	      	 	 this.$toast.warning({
+  		   	     	       message:'网络错误',
+  		   	     	       time:'1500'
+  		   	             })
+  	  	                 loading.close();
+  	  	                 
+        	      	 }
+               }).catch(err=>{
+                   loading.close();    
+                     
+                      
+              });  
+  	  },
+  	  to_Course_details(i){//跳转至课程详情
+  	  	localStorage.video_id = i.id
   	  	router.push({
   	   	     path:'./Course_details',
   	   	}) 
   	  },
   	  
   	  
+  	  
   },
   mounted(){
+  	  localStorage.video_show='true';
+	  localStorage.video_show2='true';
+  	  this.git_act()
   	  store.state.btn_show = false;
   	  store.state.bottom = 'movies'
-//	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
   }
 }
 </script>
 
 <style scoped>
+	#login_box{
+		 width: 1.066666rem;
+		 height: 1.066666rem;
+		 margin: 1.2rem auto;
+	}
+	#login_box img{
+		  width: 100%;
+		  height: 100%;
+	}
+	
 	.titles_val_box_box_btn{
 		 width: 1.586666rem;
 		 height: 0.746666rem;
@@ -86,17 +144,18 @@ export default {
 		 border-radius: 0.066666rem 0.066666rem 0 0;
 	}
 	.titles_val_box img{
-		  height: 4.533333rem;
-		  width: 9.8rem;
+		  height:4.533333rem;
+		  width:9.8rem;
 		  position: absolute;
           -webkit-filter: blur(10px); /* Chrome, Opera */
          -moz-filter: blur(10px);
         -ms-filter: blur(10px);    
         filter: blur(10px);
         filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=5, MakeShadow=false); /* IE6~IE9 */
-        position: absolute;
-        bottom: -0.5rem;
-        left: -0.3rem;
+        position:absolute;
+        bottom:-0.5rem;
+        left:-0.3rem;
+        
 	}
 	.titles_val_box{
 		 width: 100%;
@@ -110,15 +169,17 @@ export default {
   	  width: 9.2rem;
   	  height: 4.133333rem;
   	  border-radius: 0.20666rem;
-  	  overflow: hidden;
-  	  background: #87CEFA;
+  	  overflow:hidden;
+  	  background:#F5F5F5;
   	  margin: 0.4rem auto;
   	  position: relative;
   	  -moz-box-shadow:0em 0.5em 2em #9E9E9E; -webkit-box-shadow:0em 0.5em 2em #9E9E9E; box-shadow:0em 0.5em 2em #9E9E9E;
+      overflow: hidden;
   }
   .titles_img{
-  	  width: 100%;
-  	  height: 100%;
+  	  width:100%;
+  	  height:100%;
+  	  border-radius:0.20666rem;
   }
 
 </style>

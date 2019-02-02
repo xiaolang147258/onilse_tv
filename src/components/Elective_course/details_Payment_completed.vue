@@ -27,11 +27,12 @@ export default {
   	  	  router.push({
   		 	   path:'/Course_selection'
   		 }) 
+  		 location.reload()
   	  },
   	  
   },
   mounted(){
-  	 
+  	  
   	  store.state.btn_show = false;
   	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
       

@@ -2,21 +2,24 @@
   <!--我的课程-->
   <div id="hello" style="width:100%;background:white;padding-top:0.133333rem;">
      <!--没有课程时展示--> 
-       <div v-if="false" class="mei_box">
+       <div v-if="ke_act.length==0" class="mei_box">
        	   <img src="../../../static/img/meiyoukecheng.png" alt="" />
        	   <div class="p_boxa">暂时没发现课程哦~去首页看看有什么课程吧</div>
            <div @click="go_home" class="btn">去看看</div>                 
        </div>   
      <!--有课程时展示-->     
-       <div v-else class="value_box" v-for="i in 3">
+       <div v-else class="value_box" v-for="i in ke_act">
        	   <div class="value_box_c">
-       	   	   <img class="img_left" src="../../../static/img/bacs.png" alt="" />
+       	   	   <div id="img_box">
+       	    		 <img v-show="img_show==false" style="width:50%;height:50%;margin-top:0.433333rem;" src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
+       	    		 <img v-show="img_show" @load="img_show=true" :src="i.pic" alt="" />
+       	    	</div>
        	   	   <div class="box_right">
-       	   	   	 <p class="title">十万个为什么|故事全集</p> 
-       	   	   	 <p class="title_c">上次学习日期：2018-9-12</p>
+       	   	   	 <p class="title">{{i.title}}</p> 
+       	   	   	 <p class="title_c">上次学习日期：{{i.created_at}}</p>
        	   	   	 <div class="title_d">
        	   	   	 	<img src="../../../static/img/xuexijindu.png" alt="" /><p>学习进度：30%</p> 
-       	   	   	 	<div class="btns">继续学习</div>
+       	   	   	 	<div @click="go_details(i.id)" class="btns">继续学习</div>
        	   	   	 </div>
        	   	   </div>
        	   </div>
@@ -28,22 +31,65 @@
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
 export default {
   
   data () {
     return {
-    	
+    	ke_act:[],
+    	img_show:false,
     }
   },
   methods:{
+  	
+  	git_ding(){
+  		var loading = this.$loading({
+  	  	      color:'#FEE045',
+  	  	      text:'加载中...'
+  	        }); 
+  		  axios.get(store.state.urls+'api/courses/index?token='+localStorage.api_token1
+        	      ).then(res=>{
+        	      	  console.log(res.data)
+        	      	 if(res.data.code==200){
+        	      	 	 if(res.data.data.data){
+        	      	 	 	  this.ke_act=res.data.data.data
+        	      	 	 }
+        	      	 	  
+        	      	 	  console.log(this.ke_act,'订单数据')
+        	      	 	  
+        	      	 	  loading.close()
+        	      	 }else{
+        	      	 	 this.$toast.error('网络错误')
+        	      	 	 loading.close()
+        	      	 }
+               }).catch(err=>{
+                      console.log(err);
+                     
+                      loading.close()
+              }); 
+  	},
+  	
   	  go_home(){
   	     router.push({
   	   	     path:'./Course_selection',
   	   	}) 	
   	  },
   	  
+  	  go_details(id){//跳转商品详情页
+  	  	localStorage.video_show='true'
+  	  	localStorage.video_id = id;
+	 	    router.push({
+	   	     path:'./Course_details'
+	   	  }) 	 
+  	  },
+  	  
+  },
+  computed:{
+  	   
   },
   mounted(){
+  	  
+  	  this.git_ding()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine'
@@ -102,10 +148,15 @@ export default {
 		float: right;
 		/*background: #F0F0F0;*/
 	}
-	.img_left{
+	#img_box{
 		 width: 2.133333rem;
 		 height: 2.133333rem;
 		 float: left;
+		 text-align: center;
+	}
+	#img_box img{
+		 width: 100%;
+		 height: 100%;
 	}
 	.value_box_c{
 		 width: 9.2rem;

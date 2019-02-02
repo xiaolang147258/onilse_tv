@@ -1,20 +1,24 @@
 <template>
   <div id="app">
    
-    <router-view/>
-
+   <!-- <router-view/>-->
+<transition :name="transitionName">
+  <!--<keep-alive>-->
+      <router-view class="transitionBody"></router-view>
+  <!--</keep-alive>-->
+</transition>
 
 <!--底部导航栏-->
  <div class="btn" v-show="$store.state.btn_show" style="">
  	   <div style="width:5.64rem;height:100%;margin: 0 auto;color:#6E4C45;">
  	   	
     	  <div @click="btn1" class="bos" style="float: left;">
-    	  	  <img :src="($store.state.bottom=='Elective course')?'../static/img/xuanke_xuanzhong.png':'../static/img/xuanke.png'"/> 
+    	  	  <img :src="($store.state.bottom=='Elective course')?'static/img/xuanke_xuanzhong.png':'static/img/xuanke.png'"/> 
     	  	  <p :class="{colors:btn_show=='Elective course',colora:btn_show!='Elective course'}">选课</p>
     	  </div>
     	  
     	  <div @click="btn2" class="bos" style="float: right;">
-    	  	  <img :src="($store.state.bottom=='mine')?'../static/img/wode_xuanzhong.png':'../static/img/wode.png'"/> 
+    	  	  <img :src="($store.state.bottom=='mine')?'static/img/wode_xuanzhong.png':'static/img/wode.png'"/> 
     	  	  <p :class="{colors:btn_show=='mine',colora:btn_show!='mine'}">我的</p>
     	  </div>
     	  
@@ -33,7 +37,7 @@ export default {
   name: 'App',
   data(){
   	 return{
-  	 	   
+  	 	   transitionName: 'transitionLeft'
   	 }
   },
   computed:{
@@ -46,18 +50,28 @@ export default {
   	  router.push({
   	   	 path:'./Course_selection',
   	   	 
-  	   	})
-  	    
+  	   });
+  	    this.$store.state.bottom='Elective course';
   	},
   	btn2(){
   	    router.push({
   	   	 path:'./mine',
   	   	 
-  	   	}) 
-  	  
+  	   	});
+  	    this.$store.state.bottom='mine';
   	},
   	
   },
+  
+  watch: { 
+  '$route' (to, from) { 
+   const arr = ['/Course_selection','/mine'];
+   const compare = arr.indexOf(to.path)>arr.indexOf(from.path);
+   this.transitionName = compare ? 'transitionLeft' : 'transitionRight';
+  } 
+ },
+  
+  
   mounted(){
 //	  this.btn1()
 //    let self = this;
@@ -71,7 +85,7 @@ export default {
 //  document.body.scrollTop += moveWidth;
 //}
 //})
-
+      
   }
   
 }
@@ -79,6 +93,31 @@ export default {
 </script>
 
 <style scoped="scoped">
+	
+.transitionBody{
+ transition: all 0.4s ease; /*定义动画的时间和过渡效果*/
+}
+ 
+.transitionLeft-enter,
+.transitionRight-leave-active {
+  -webkit-transform: translate(100%, 0);
+  transform: translate(100%, 0); 
+  position: absolute;
+  top: 0;
+   /*当左滑进入右滑进入过渡动画*/
+}
+ 
+.transitionLeft-leave-active,
+.transitionRight-enter {
+  -webkit-transform: translate(-100%, 0); 
+  transform: translate(-100%, 0); 
+  position: absolute;
+  top: 0;
+}
+	
+	
+	
+	
 	.colora{
 		  color: #C5B2AB;
 	}

@@ -2,12 +2,12 @@
   <!--优惠券-->
   <div id="hello" style="width:100%;background:white;padding-top: 1.306666rem;">
        <div class="top_tab">
-       	   <div @click="tab_click(0)" class="top_tab_c" :class="{top_tab_color:tab_show==0}">可使用<div v-show="tab_show==0" class="top_tab_c_box"></div></div>
-       	   <div @click="tab_click(1)" class="top_tab_c" :class="{top_tab_color:tab_show==1}" style="margin-left:1.64rem;">已使用<div v-show="tab_show==1" class="top_tab_c_box"></div></div>
-       	   <div @click="tab_click(2)" class="top_tab_c" :class="{top_tab_color:tab_show==2}" style="margin-left:1.64rem;">已过期<div v-show="tab_show==2" class="top_tab_c_box"></div></div>
+       	   <div @click="tab_click(0,'effective')" class="top_tab_c" :class="{top_tab_color:tab_show==0}">可使用<div v-show="tab_show==0" class="top_tab_c_box"></div></div>
+       	   <div @click="tab_click(1,'overdue')" class="top_tab_c" :class="{top_tab_color:tab_show==1}" style="margin-left:1.64rem;">已使用<div v-show="tab_show==1" class="top_tab_c_box"></div></div>
+       	   <div @click="tab_click(2,'beenused')" class="top_tab_c" :class="{top_tab_color:tab_show==2}" style="margin-left:1.64rem;">已过期<div v-show="tab_show==2" class="top_tab_c_box"></div></div>
        </div>
     <!--没有订单时展示-->
-       <div v-if="false" class="mei_box">
+       <div v-if="act_show" class="mei_box">
        	   <img src="../../../static/img/xiaoquan.png" alt="" />
        	   <div class="p_boxa">暂时没发现优惠券哦~去首页看看有什么课程吧</div>
            <div @click="go_home" class="btn">去看看</div>                 
@@ -18,12 +18,11 @@
        	    <div class="box" v-for="i in 3">
        	    	 <div class="boxs1">
        	    	 	<img :src="tab_show==0?'../../../static/img/youhui_c.png':'../../../static/img/youhui_a.png'"/> 
-       	    	 	<div class="boxs1_c">
-       	    	 		<p>限时立减券</p>
-       	    	 		<a>有限日期：2019-12-10</a>
-       	    	 	</div>
+       	    	 	 <div class="boxs1_c">
+       	    	 		 <p>限时立减券</p>
+       	    	 		 <a>有限日期：2019-12-10</a>
+       	    	 	 </div>
        	    	 </div>
-       	    	 
        	    	 <div class="boxs2">
        	    	 	 <img src="../../../static/img/youhui_b.png"/>
        	    	 	 <div class="boxs2_c">
@@ -33,11 +32,7 @@
        	    	 	 <img v-show="tab_show==1" id="sy" src="../../../static/img/yishiyong.png" alt="" />
        	    	 	 <img v-show="tab_show==2" id="sy" src="../../../static/img/yiguoqi.png" alt="" />
        	    	 </div>
-       	    	 
        	    </div>	
-       	    
-       	    
-       	    
        	    
        </div>
 
@@ -47,16 +42,39 @@
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
 export default {
   
   data () {
     return {
     	tab_show:0,
+    	actives:'',//数据
+    	act_show:false,
     }
   },
   methods:{
-  	 tab_click(index){
+  	 tab_click(index,val){
   	 	 this.tab_show = index;
+  	 	  const loading = this.$loading({
+  	  	      color:'#FEE045',
+  	  	      text:'加载中...'
+  	        });
+  	 	  axios.get(store.state.urls+'api/coupons/'+val
+        	      ).then(res=>{
+        	      	 if(res.data.code==200){
+        	      	 	  console.log(res.data.data,'优惠券数据');
+        	      	 	  this.actives = res.data.data
+        	      	 	  this.act_show = this.actives.length==0?true:false;
+	  	    	          loading.close();
+        	      	 }else{
+        	      	 	 this.$toast.error('网络错误')
+  	  	             loading.close()
+        	      	 }
+               }).catch(err=>{
+               	     
+  	  	             loading.close()
+                      console.log(err)
+              }); 
   	 },
   	 go_home(){
   	 	 router.push({
@@ -65,6 +83,7 @@ export default {
   	 }
   },
   mounted(){
+  	  this.tab_click(0,'effective');
   	  $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine'
@@ -143,8 +162,8 @@ export default {
 	.boxs2{
 		width: 3.306666rem;
 		height: 100%;
-		float: right;
-		position: relative;
+		float: left;
+		position:relative;
 	}
 	.boxs1 img{
 		width: 100%;

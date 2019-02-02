@@ -1,35 +1,74 @@
 <template>
   <!--课程详情-->
-  <div id="hello" style="width:100%;float:left;padding-bottom: 1.606666rem;">
+  <div  id="hello" style="width:100%;float:left;padding-bottom:1.3367rem;">
+  	
+  	
+    
+    
+
+  	 <!--<mu-fade-transition>
+          <div id="mengs" v-show="true">
+          	 <div>
+          	   <img src="../../../static/img/gif/0147d85b320ba0a80120b959abcc40.gif" alt="" />
+              </div>
+          	</div>
+    </mu-fade-transition>-->
   	 
-     <div class="top_title">冲向太空游乐园，和星星月亮一起玩耍</div>
-<!--视频播放器---------------------------------------------------------------------------------------------------------------------------->    	 
-     <div v-show='false' id="tv_box">
+     <div v-if="loading" class="top_title">{{actives.group.title}}</div>
+
+<!--腾讯视频播放器-------------------------------------------------------------------------------------------------------------------------->   
+    <div id="video_box" style="position: relative;">
+    	 <img v-if="loading" id="tv_background" style="position: absolute;top: 0;left:0;z-index:-1;width:100%;height:100%;" :src="actives.group.pic?actives.group.pic:''" alt="" />
+     <!--腾讯播放器-------------------------------------------------------------------> 
+    	 <!--<div id="videoCon" class="video"></div>-->
+     <!--七牛云播放器------------------------------------------------------------------> 	 
+    	 <video v-show="vid!=''" id="demo_video" onended="document.getElementById('video_ss').style.display='block'" class="video-js vjs-big-play-centered"></video>
+       
+       <div v-if="loading" id="video_ss">
+       	  <div  v-if="chak_to">
+       	    <p style="color:#FFFFFF;font-size:0.373333rem;">本课程你已经看完了，是否需要查看其它课程？</p>  
+       	    <div @click="go_home" class="video_btn_c">返回首页</div>
+       	  </div>
+       	  <div v-else>
+       	   <p style="color:#FFFFFF;font-size:0.373333rem;">本节课已经观看完毕，是否观看下一节课？</p>  
+    	 	   <div @click="next_set" class="video_btn_c">下一集</div>
+          </div>
+        </div>
+       
+     <!--视频播放器---------------------------------------------------------------------------------------------------------------------------->    	 
+     <!--<div id="tv_box">
      	<div style="width: 100%;height: 100%;">
      		<video-player  style='' class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions">
      		</video-player>  
      	</div>
-     </div>
-    
-    <div  style="position: relative;">
-    	 <img id="tv_background" style="position: absolute;top: 0;left:0;z-index:-1;" src="../../../dist/static/img/b_bb.png" alt="" />
-    	 <div style=""  id="videoCon" class="video"></div>
+     </div>-->
+     
+    	 <div v-show="vid==''" id="video_btn">
+    	 	 <div v-if="loading">
+    	 	  <p v-if="actives.node[0].status==1" style="color:#FFFFFF;font-size:0.373333rem;">该课程需要付费，如需观看请购买课程</p> 
+    	 	  <p v-else style="color:#FFFFFF;font-size:0.373333rem;">该课节需要付费，如需观看请购买完整课程</p> 
+    	 	  <div @click="to_buy" class="video_btn_c">去购买</div>
+    	 	 </div> 
+    	 </div>
     </div>
+<!------------------------------------------------------------------------------------------------------------------------------------->    
+    <div v-if="loading">
 <!------------------------------------------------------------------------------------------------------------------------------------->
      <div @click="to_tv" class="tv_box_bto1">
-     	  <p class="tv_box_bto1_p1">¥208.00</p>
+     	  <p class="tv_box_bto1_p1">¥{{actives.group.price}}</p>
      	  <div class="tv_box_bto2"> 
      	  	   
-     	  	   <div class="tv_box_bto2_img"></div>
-     	  	   <div style="z-index:2;right:2.786666rem;" class="tv_box_bto2_img"></div>
-     	  	   <div style="z-index:1;right:2.333333rem;" class="tv_box_bto2_img"></div>
-     	  	   <p class="tv_box_bto2_p">39<a style="color: #C5B2AB;">人已购买</a></p>
+     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=1" class="tv_box_bto2_img"><img :src="actives.group.buyusers?actives.group.buyusers[0]:''" alt="" /></div>
+     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=2" style="z-index:2;right:2.786666rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[1]:''" alt="" /></div>
+     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=3" style="z-index:1;right:2.333333rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[2]:''" alt="" /></div>
+     	  	   
+     	  	   <p class="tv_box_bto2_p">{{actives.group.period}}<a style="color: #C5B2AB;">人已购买</a></p>
      	  	   
      	  </div>
      </div>
      
      <div class="to_tv_numder">
-     	    <p class="to_tv_numder_p">15课节 | 6～12岁</p>
+     	    <p class="to_tv_numder_p">{{actives.group.period}}课节 | {{actives.group.adaptcrowd}}岁</p>
      	    <div class="to_tv_numder_btn"><van-icon class='dou' name="info-o"/>&nbsp;服务说明</div>
      </div>
      
@@ -40,15 +79,9 @@
     </div>
      
 <!--课程详情------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-    <div id="aws1">
-    	   <p>百科全书就像一所没有围墙的学校，它传承着人类的文明。翻开这《中国儿童成长知识必读:宇宙太空大百科(彩图学生版)》，精彩的
-    	   	世界将向你敞开心扉。来吧，让我们一起在这套《中国儿童成长知识必读》中探知世界，开启科学之门。这是送给青少年的一份最珍贵的礼
-    	   	物。希望在《中国儿童成长知识必读》的陪伴下，孩子们的世界会更加宽广。</p>
-    	   	<img src="../../../dist/static/img/b_bb.png" alt="" />
-    	   	<img src="../../../dist/static/img/b_bb.png" alt="" />
-    	   	<img src="../../../dist/static/img/b_bb.png" alt="" />
-    </div>
     
+    <div v-html="actives.group.details" id="aws1"></div>
+    	   
 <!--课程目录------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->     
     <div id="aws2">
     	   <div class="aws2_title">
@@ -56,9 +89,9 @@
     	   </div>
     	   <div class="aws2_title_2"></div>
     	<!----------------------------------------------------------------------------------------->   
-    	   <div v-for="(i,index) in 5" @click="aws_tabsclick(index)" class="aws_tabs">
-    	   	     <p class="aws_tabs_p1" :class="{tv_box_tab_tits:aws2_index==index}">【录播】第一节 英语课理论</p>
-    	   	     <div v-if="aws2_index==index"  class="aws_tabs_btn">正在播放&nbsp;<van-icon name="play" /></div>
+    	   <div v-for="(i,index) in actives.node" @click="aws_tabsclick(i,index)" class="aws_tabs">
+    	   	     <p class="aws_tabs_p1" :class="{tv_box_tab_tits:adl==index}">【{{i.status==2||localStorage.vip_id==1?'免费':'收费'}}】{{i.title}}>
+    	   	     <div v-if="adl==index"  class="aws_tabs_btn">正在播放&nbsp;<van-icon name="play" /></div>
     	   	     <p v-else class="aws_tabs_p2">50：53</p>
     	   </div>
     	   
@@ -68,52 +101,60 @@
     <div id="aws3">
     	  <div class="aws2_title" style="margin-bottom:0.453333rem;">
     	   	  <p class="aws2_title_p1">课程评价</p><div class="aws2_title_div"></div>
-    	   	  <p class="aws2_title_p">(累计<a>7121</a>条)</p>
+    	   	  <p class="aws2_title_p">(累计<a>{{actives.group.count}}</a>条)</p>
     	   </div>
     	  
-    	   <div v-for="(i,index) in 5" class="aws_pin_tab">
+    	   <div v-for="(i,index) in actives.comment" class="aws_pin_tab">
     	   	    <div class="aws_pin_tab_a">
-    	   	    	   <p class="aws_pin_tab_a_name">孙菲菲</p><p class="aws_pin_tab_a_date">2018-11-25 21:23:43</p>
-    	   	    	   <a class="aws_pin_tab_a_a"><van-rate v-model="value" :size='15' disabled disabled-color='#FEE045' /></a>
+    	   	    	   <p class="aws_pin_tab_a_name">{{i.nickname}}</p><p class="aws_pin_tab_a_date">{{i.created_at}}</p>
+    	   	    	   <a class="aws_pin_tab_a_a"><van-rate v-model="i.score" :size='15' disabled disabled-color='#FEE045' /></a>
     	   	    </div> 
     	   	    <div class="aws_pin_values">
-    	   	    	   老师课程讲得非常好，老师很专业老师课程讲得非常好，老师很
-                                              专业老师课程讲得非常好，老师很专业。。
+    	   	    	   {{i.content}}
     	   	    </div> 
     	   </div>
     </div>
-    <div class="logins">查看更多评论…</div>    
+    <div style="width: 100%;display:inline-block;">
+        <div @click="git_commit" class="logins">{{actives.comment.length==0?'暂时没有评论':btn_val}}</div>  
+    </div>
 <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->  
 
 <mu-scale-transition>
-  <img v-show="to_top_show" @click="to_top" class="ding" src="../../../static/img/zhiding.png" alt="" />
+  <img v-show="to_top_show" @click="to_top" class="ding" src="static/img/zhiding.png" alt="" />
 </mu-scale-transition>
 
 <!--底部购买||评论栏----------------------------------------------------------------------------------------------------->     
   <!--用户购买后展示--> 
-   <div v-if="true" @touchmove.prevent class="pin_btn">
+   <div v-if="Whether_to_buy" @touchmove.prevent class="pin_btn">
+   	 <!--<div v-if="true" @touchmove.prevent class="pin_btn">-->
+   	 	  
+    	   <a href="tel:18924319390">
     	   <div class="pin_btn_zi">
-    	   	   <img src="../../../static/img/xixun.png" alt="" />
-    	   	   <p>咨询</p>
+    	   	   <img src="static/img/xixun.png" alt="" />
+    	   	   <p>咨询</p> 
     	   </div>
+    	  </a>
+    	  
     	   <div class="pin_btn_zi">
-    	   	   <img src="../../../static/img/shoucahng.png" alt="" />
+    	   	   <img @click="cherk_click" :src="check?'static/img/shoucahng.png':'static/img/yishoucahng.png'" alt="" />
     	   	   <p>收藏</p>
     	   </div>	   
     	   <div @click="show1=true" class="right_btn">发表评论</div>
     </div>
   <!--用户未购买时展示-->  
     <div v-else @touchmove.prevent class="pin_btn">
+    	  <a href="tel:18924319390">
     	   <div class="pin_btn_zi">
-    	   	   <img src="../../../static/img/xixun.png" alt="" />
-    	   	   <p>咨询</p>
+    	   	   <img src="static/img/xixun.png" alt="" />
+    	   	 <p>咨询</p> 
     	   </div>
+    	  </a>
     	   <div class="pin_btn_zi">
-    	   	   <img src="../../../static/img/shoucahng.png" alt="" />
+    	   	   <img @click="cherk_click" :src="check?'static/img/shoucahng.png':'static/img/yishoucahng.png'" alt="" />
     	   	   <p>收藏</p>
     	   </div>	  
     	   <div @click="to_buy" class="right_btn">立即购买</div>
-    	   <p class="right_btn_rmb">¥288.00</p>
+    	   <p class="right_btn_rmb">¥{{actives.group.price}}</p>
     </div>
 <!------------------------------------------------------------------------------------------------------------------>    
       
@@ -124,8 +165,8 @@
         	<div style="width:8.466666rem;height:100%;margin: 0 auto;position: relative;">
         	  <mu-slide-bottom-transition>
               <div @click.stop class="meng_pin" v-show="show1">
-              	  <div class="meng_pin_top">
-              	  	   <a class="meng_pin_top_xing"><van-rate v-model="values1" /></a><p class="meng_pin_top_p">满意</p>
+              	  <div @click="text_jiao" class="meng_pin_top">
+              	  	  <a class="meng_pin_top_xing"><van-rate v-model="values1" /></a><p class="meng_pin_top_p">满意</p>
               	  </div>
               	 <div style="width:6.866666rem;margin: 0 auto;">
               	     <textarea @blur="inp_show" v-show="show1" placeholder="想说点什么呢！,200字以内" class="texts" v-model="text_val" onkeydown="if(event.keyCode==32||event.keyCode==13){return false;}" maxlength="200" rows="" cols=""></textarea> 
@@ -133,87 +174,389 @@
               	 
               	 <div class="meng_pin_bto">
               	 	     <div @click="show1=false" class="meng_pin_bto_btn1">取消</div>
-              	 	     <div class="meng_pin_bto_btn2">发布</div>
+              	 	     <div @click="add_commit_s" class="meng_pin_bto_btn2">发布</div>
               	 </div>
               	 
               </div>
             </mu-slide-bottom-transition>
            </div>
         </div>
-    </mu-fade-transition>
-  
-  
-  
-  
+     </mu-fade-transition>
+    
+    </div>
+    
+    
   </div>
 </template>
 
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
+import Message from 'muse-ui-message';
+
 export default {
-  
   data () {
-    return {
+    return{
     	to_top_show:false,
-    	
     	text_val:'',//评论框内容
-    	
     	show1:false,
     	value:3,//禁用评分的评分数
     	values1:1,//可以评分的评分数
-    	 tit_index:1,
-    	 aws2_index:0,
-    	 
-    	 playerOptions : {//初始化ios适配良好的视频播放器
-        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
-        autoplay: false, //如果true,浏览器准备好时开始回放。
-        muted: false, // 默认情况下将会消除任何音频。
-        loop: false, // 导致视频一结束就重新开始。
-        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-        language: 'zh-CN',
-        aspectRatio: '16:9', //将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-        sources: [{
-          type: "",
-          src: "static/tv/ce872b3b8be8ac09d7c879f92ae74219.mp4" //url地址
-        }],
-        poster:"static/img/b_bb.png", //你的封面地址
-        // width: document.documentElement.clientWidth,
-        notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-        controlBar: {
-          timeDivider: true,
-          durationDisplay: true,
-          remainingTimeDisplay: false,
-          fullscreenToggle: true  //全屏按钮
-        }
-    },
+    	tit_index:1,
+    	aws2_index:0,
+    	vid:'',//q0011iyvdam 
+    	actives:{},
+    	
+//  	 playerOptions : {//初始化ios适配良好的视频播放器
+//      playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+//      autoplay: false, //如果true,浏览器准备好时开始回放。
+//      muted: false, // 默认情况下将会消除任何音频。
+//      loop: false, // 导致视频一结束就重新开始。
+//      preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+//      language: 'zh-CN',
+//      aspectRatio: '16:9', //将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+//      fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+//      sources: [{
+//        type: "",
+////        src:this.vid_rl //url地址
+//        src:'http://videos.cieo.com.cn/测试节点1-video.mp4'
+//      }],
+//      poster:'', //你的封面地址
+//      // width: document.documentElement.clientWidth,
+//      notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+//      controlBar: {
+//        timeDivider: true,
+//        durationDisplay: true,
+//        remainingTimeDisplay: false,
+//        fullscreenToggle: true  //全屏按钮
+//      }
+//  },
     
-    vid:'m0532apqki0',//q0011iyvdam
+  
+    loading:false,
     
+    Whether_to_buy:false,
+    
+    check:true,//收藏状态
+    
+    pages:0,//评论数据页数
+    
+    btn_val:'查看更多评论...',
+    
+    chak_to:false,
+    
+   
    }
   },
-  computed:{
-  	
-  },
+  
   methods:{
-  	inp_show(){
+  	
+  	
+  	text_jiao(){
+//		 $('.texts').focus();
+//		 $("html, body").animate({scrollTop:-$("html, body").height()});  
+  	},
+  	go_home(){
+  		   router.push({
+  	   	     path:'/Course_selection',
+  	   	}) 
+  	},
+  	next_set(){//下一节课
+		    var a =  Number(localStorage.index)
+		     a++
+		     localStorage.index = a;
+  		   location.reload()
+  	},
+  	
+  	
+  	add_commit_s(){
+  		if(this.text_val!=''&&this.text_val.length>6){
+  			  axios({
+            method:"post",
+            url:"videos/addComment",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:this.actives.group.id,
+                 score:this.values1,
+                 content:this.text_val,
+                 token:localStorage.api_token1,
+                 titles:this.actives.group.title
+             }
+            }).then(res=>{
+            	      console.log(res.data)
+                    if(res.data.code==200){
+                    	  this.$toast.success('评论成功');
+                    	  this.show1 = false;
+                    	  this.git_active()
+                    	  this.text_val = ''
+                    }
+             }).catch(err=>{
+                      console.log(err);
+             });
+  		}else{
+  			      this.$toast.error({
+  		   	     	 message:'内容不能为空,且内容长度大于6个字',
+  		   	     	 time:'1500'
+  		   	     })  
+  		}
+  		  
+  	},
+  	
+  	qu_cherk(){//取消收藏
+  		   axios({
+            method:"post",
+            url:"collect/del",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:this.actives.group.id,
+             }
+            }).then(res=>{
+            	        console.log(res.data);
+                      if(res.data.code==200){
+//                    	  this.check = true; 
+//                        this.$toast.info('已取消收藏');
+                      }
+             }).catch(err=>{
+                      console.log(err);
+             });
+  	},
+  	
+  	cherk_click(){ 	//点击收藏
+  		if(this.check){
+  		   axios({
+            method:"post",
+            url:"collect/add",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:this.actives.group.id,
+                 type:this.actives.group.type_id,
+                 token:localStorage.api_token1
+             }
+            }).then(res=>{
+            	        console.log(res.data);
+                      if(res.data.code==200){
+                      	  this.check = false; 
+                          this.$toast.success('收藏成功');
+                      }
+             }).catch(err=>{
+                      console.log(err);
+             });
+  		   }else{
+  		   	   Message.confirm('确定取消收藏吗？','提示',{
+          	   type: 'warning',
+          	   icon:''
+        	   }).then(({result}) => {
+         	   if(result){
+           	   this.qu_cherk() 
+         	    }else{}
+        	   });
+  		   }
+  	},
+  	
+  	git_commit(){//点击更多评论
+  		  
+  		  var loading = this.$loading({
+  	  	      color:'#FEE045',
+  	  	      text:'加载中...'
+  	        }); 
+  		  
+  	    this.pages++
+  	    var thit = this
+  		  axios.get(store.state.urls+'api/videos/comment?group='+thit.actives.group.id+'&page='+thit.pages+'&token='+localStorage.api_token1
+        	     ).then(res=>{
+                  if(res.data.code==200){
+                  	     if(res.data.data.length!=0){
+                  	     	  var a = res.data.data.data;
+                  	       for(var i=0;i<a.length;i++){
+                  	     	   thit.actives.comment.push(a[i]);
+                  	       }
+                  	       console.log(thit.actives.comment,'合并后的评论数据');
+                  	     }else{
+                  	     	   this.btn_val = '暂时没有更多评论了'
+                  	     }
+                  	      loading.close()
+                  }else{
+                  	 this.$toast.error('网络错误')
+  	  	             loading.close()
+                  }
+                }).catch(err=>{
+                   console.log(err)
+//                  this.$toast.warning({
+//		   	     	     message:'网络错误',
+//		   	     	     time:'1500'
+//		   	         })
+                    loading.close()
+              }); 
+  	},
+  	
+  	git_active(){
+  		 this.actives = {}
+  		 
+  		 var loading = this.$loading({
+  	  	      color:'#FEE045',
+  	  	      text:'加载中...'
+  	        });
+  		 
+  		  axios.get(store.state.urls+'api/videos/details?id='+localStorage.video_id+'&token='+localStorage.api_token1
+        	      ).then(res=>{
+                  if(res.data.code==200){
+                  	     this.actives = res.data.data;
+                  	     console.log(this.actives,'视频详情数据');
+                  	    
+                  	     this.loading = true;
+                  	     this.checkOrder(this.actives.group.id);
+                  	     this.check_tr(this.actives.group.id);
+                  	    
+                  	    var ac = Number(localStorage.index);
+                        ac++;
+		                    this.chak_to = (ac==this.actives.node.length)?true:false;
+                         loading.close()
+                  }else{
+                  	 this.$toast.warning({
+  		   	     	     message:'网络错误',
+  		   	     	     time:'1500'
+  		   	         })
+	  	              loading.close()
+                  }
+                }).catch(err=>{
+//              	 this.$toast.warning({
+//		   	     	     message:'网络错误',
+//		   	     	     time:'1500'
+//		   	         })
+  	  	             loading.close()
+                   console.log(err)   
+              }); 
+  	   },
+  	
+  	check_tr(id){//检测用户当前视频是否收藏
+  		  axios.get(store.state.urls+'api/collect/check?group='+id+'&token='+localStorage.api_token1
+        	      ).then(res=>{
+        	      	console.log(res.data,'检测用户是否收藏')
+                  if(res.data.code==200){
+                  	     console.log(res.data.data,'视频详情数据');
+                  	     this.check = res.data.data
+                  }
+                }).catch(err=>{
+                   console.log(err)   
+              }); 
+  	},
+  	
+  	checkOrder(id){//检测用户当前视频是否已经购买
+  		     axios({
+            method:"post",
+            url:"order/checkOrder",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:id,
+                 token:localStorage.api_token1
+             }
+            }).then(res=>{
+                      console.log(res.data,'是否购买');
+                      this.Whether_to_buy = res.data.data;
+                      if(this.Whether_to_buy==true||localStorage.vip_id==1){//如果已经购买直接加载第一节课程
+                      	 this.vid = this.actives.node[0].videos;
+                      	 this.aws2_index = 0;
+                      }else{//没有购买先判断第一节课是否免费-如果免费就加载第一节课，否则不加载课程页面展示需要付费
+                      	 this.vid = this.actives.node[0].status==2?this.actives.node[0].videos:'';
+                      	 if(this.actives.node[0].status==2){
+                      	 	  this.aws2_index=0
+                      	 }else{
+                      	 	  this.aws2_index='o'
+                      	 }
+                       }
+                      
+                   window.setTimeout(()=>{
+                   	   store.state.video_b_url = this.actives.group.pic;
+                       store.state.dat.Initializationone(this.actives.node[Number(localStorage.index)].videos,'1');
+                       this.tv_git();
+                   },500)
+                      
+                      
+             }).catch(err=>{
+                      console.log(err);
+             });
+  	},
+  	
+  	
+  	inp_show(){//监听输入框失去焦点
   		$("html, body").animate({scrollTop:$("html, body").height()});  
   	},
+  	
   	to_buy(){//点击购买btn ==> 判断用户是否绑定有手机号码，
   		 this.destroyed()
-  		 router.push({
-  		 	   path:'/details_Verify_phone'
-  		 })
+  		 localStorage.group_id = this.actives.group.id;
   		 
+  		 axios.get(store.state.urls+'api/user/checkPhone?token='+localStorage.api_token1
+        	      ).then(res=>{
+        	      	if(res.data.code==200){
+        	      		
+        	      		 if(res.data.data==true){//已绑定手机
+		                      router.push({
+		 	                      path:'/details_Confirm_Order'
+		                      })
+		                      location.reload()
+        	      		 }else{//未绑定手机
+		                      router.push({
+		 	                      path:'/details_Verify_phone'
+		                      })
+        	      		 }
+        	      	}else{
+        	      		this.$toast.warning({
+  		   	     	     message:'网络错误',
+  		   	     	     time:'1500'
+  		   	         })
+  	  	             
+        	      	}
+                }).catch(err=>{
+                   console.log(err)   
+//                 this.$toast.warning({
+//		   	     	     message:'网络错误',
+//		   	     	     time:'1500'
+//		   	         })
+  	  	             
+              }); 
   	},
   	
-  aws_tabsclick(index){
-  	this.aws2_index = index 
+  aws_tabsclick(i,index){//用户点击课程目录
+  	 if(i.status==1){//判断当前被点击的课程是否为收费项
+  	 	 if(this.Whether_to_buy==true||localStorage.vip_id==1){//是收费项的话，再判断用户是否已经购买--如果已经购买，则加载视屏，自动滑动到顶部
+  	 	 	  this.aws2_index = index;
+  	 	 	  this.vid = i.videos;
+  	 	 	  localStorage.index = index
+  	 	    location.reload()
+  	 	 	  this.tv_git() 
+  	 	 	  $("html, body").animate({scrollTop:0});  
+  	 	 }else{//如果没有购买则弹出提示框，让用户选择是否去购买
+	 	 	  Message.confirm('该视频需要付费才能观看，是否立即购买？','提示', {
+         type: 'warning',
+         icon:''
+        }).then(({ result }) => {
+         if (result) {
+//         this.$toast.message('点击了确定');
+           this.to_buy() 
+         } else {}
+        });
+  	 	 }
+  	 }else{//判断为免费项则加载视频，自动滑动到顶部
+  	 	  this.aws2_index = index;
+  	 	  this.vid = i.videos;
+  	 	  localStorage.index = index
+  	 	  location.reload()
+//      store.state.dat.Initializationadd(i.videos)
+	 	    
+  	 	  this.tv_git() 
+  	 	  
+  	 	 $("html, body").animate({scrollTop:0});  
+  	 }
   },
   
    destroyed (){//移除页面监听--跳转其他页面务必调用该事件
-           window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener('scroll', this.handleScroll)	
 },
 handleScroll(){//监测滑动
     var a = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
@@ -242,41 +585,122 @@ handleScroll(){//监测滑动
   },
   
   to_tv(){//更换视频，需要重新初始化播放器
-  		  this.vid = this.vid=='m0532apqki0'?'q0011iyvdam':'m0532apqki0'
-  		  this.tv_git()
+//		  this.vid = this.vid=='m0532apqki0'?'q0011iyvdam':'m0532apqki0'
+//		  this.tv_git()
   },
   tv_git(){//初始化安卓适配良好的 腾讯视频播放器
-  	var a = document.documentElement.clientWidth;
-  	let heghts = document.documentElement.clientHeight*0.3
-  	$('#tv_background').css('width',a).css('height',heghts)
-  	var video = new tvp.VideoInfo();
-    video.setVid(this.vid);//视频vid
-    var player = new tvp.Player(a,heghts);//视频高宽
-    player.setCurVideo(video);
-    player.addParam("autoplay","0");//是否自动播放，1为自动播放，0为不自动播放
-	  player.addParam("wmode","opaque");
-	  player.addParam("showend",0);
-	  player.addParam("adplay",0); 
-	  player.addParam("wmode","transparent");
-    player.addParam("pic","");//默认图片地址
-    player.addParam("flashskin","http://imgcache.qq.com/minivideo_v1/vd/res/skins/TencentPlayerMiniSkin.swf");//是否调用精简皮肤，不使用则删掉此行代码
-    player.write("videoCon");
+//	var a = document.documentElement.clientWidth;
+//	let heghts = document.documentElement.clientHeight*0.3
+////	$('#tv_background').css('width',a).css('height',heghts)
+//	var video = new tvp.VideoInfo();
+//  video.setVid(this.vid);//视频vid
+//  var player = new tvp.Player(a,heghts);//视频高宽
+//  player.setCurVideo(video);
+//  player.addParam("autoplay","0");//是否自动播放，1为自动播放，0为不自动播放
+//	  player.addParam("wmode","opaque");
+//	  player.addParam("showend",0);
+//	  player.addParam("adplay",0); 
+//	  player.addParam("wmode","transparent");
+//  player.addParam("pic","");//默认图片地址
+//  player.addParam("flashskin","http://imgcache.qq.com/minivideo_v1/vd/res/skins/TencentPlayerMiniSkin.swf");//是否调用精简皮肤，不使用则删掉此行代码
+//  player.write("videoCon");
     $('video').attr("webkit-playsinline",'true');//限制ios下自动全屏播放
-  	$('video').attr("playsinline",'true');
+	  $('video').attr("playsinline",'true');  
   },
   	  
   },
+  
+  created(){
+  	 
+  },
+  
   mounted(){
-  	  this.tv_git()
+  	  this.git_active()//获取数据
+  	  this.tv_git()//初始化播放器
+  	 
   	  store.state.btn_show = false;
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
       window.addEventListener('scroll',this.handleScroll);
       $("html, body").animate({scrollTop:0});
-  }
+      
+        this.aws2_index = Number(localStorage.index);
+        console.log(this.aws2_index);
+
+      if(localStorage.video_show=='true'){
+      	   location.reload();
+      	   localStorage.index = 0;
+      	   localStorage.video_show='false'
+       }
+      
+  
+      
+      
+  },
+  computed:{
+  	  adl(){
+  	  	 return Number(localStorage.index)
+  	  },
+  	   
+  },
+  
 }
+
 </script>
 
 <style scoped>
+	#mengs{
+		 width: 100%;
+		 height: 100%;
+		 position: fixed;
+		 top: 0;
+		 left: 0;
+		 z-index:500;
+		 background:rgba(255,255,255,0.9);
+		 text-align: center;
+	}
+   #video_ss{
+   	   width: 100%;
+   	   height: 100%;
+   	   background: rgba(0,0,0,.9);
+   	   position: absolute;
+   	   top: 0;
+   	   left: 0;
+   	   z-index: 500;
+   	   display: none;
+   	   padding-top: 2rem;
+   	   text-align: center;
+   }
+	.vjs-big-play-centered{	
+		 width: 100%;
+		 /*height: 2.666666rem;*/
+		 position: relative;
+		 
+	}
+	.video_btn_c{
+		  width: 1.773333rem;
+		  height: 0.746666rem;
+		  line-height: 0.746666rem;
+		  text-align: center;
+		  background: #FEE045;
+		  margin: 0.533333rem auto;
+		  border-radius:0.586666rem;
+	}
+	#video_btn{
+		 width:100%;
+		 height:100%;
+		 text-align: center;
+		 font-size: 0.333333rem;
+		 color: #6E4C45;
+		 padding-top: 1.093333rem;
+		 position: absolute;
+		 top: 0;
+		 left: 0;
+	}
+	#video_box{
+		 width: 100%;
+		 height:5.533333rem;
+		 background:rgba(0,0,0,.6);
+	}
 	.ding{
 		  width:1.626666rem;
 		  height: 1.626666rem;
@@ -395,7 +819,9 @@ handleScroll(){//监测滑动
 		 padding-left: 0.453333rem;
 	}
 	.logins{
-		  width: 3.36rem;
+		  
+		  
+		  padding: 0 0.373333rem;
 		  height: 0.973333rem;
 		  line-height: 0.973333rem;
 		  color: #6E4C45;
@@ -404,7 +830,8 @@ handleScroll(){//监测滑动
 		  background: #EAEAEA;
 		  margin-bottom: 0.426666rem;
 		  margin:auto;
-		  border-radius:0.133333rem;
+		  /*border-radius:0.133333rem;*/
+		 margin-top: -0.27rem;
 	}
 	.aws_pin_values{
 		  width: 100%;
@@ -604,6 +1031,13 @@ handleScroll(){//监测滑动
 		 float: right;
 		 margin-right:0.3rem;
 	}
+	.tv_box_bto2_img img{
+		 width: 100%;
+		 height: 100%;
+		 position: absolute;
+		 top: 0;
+		 left: 0;
+	}
 	.tv_box_bto2_img{
 		 width: 0.666666rem;
 		 height: 0.666666rem;
@@ -614,6 +1048,7 @@ handleScroll(){//监测滑动
 		 top: 0.25rem;
 		 right: 3.24rem;
 		 z-index: 3;
+		 overflow: hidden;
 	}
 	.tv_box_bto2{
 		 width: 3.8rem;

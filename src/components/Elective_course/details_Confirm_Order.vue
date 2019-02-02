@@ -1,11 +1,12 @@
 <template>
-  <div id="hello"  style="width:100%;background:white;">
+	<!--订单支付前的页面-->
+  <div id="hello" v-if="logins" style="width:100%;background:white;">
     
     <div class="kevalue">
-    	 <img src="../../../static/img/b_bb.png" alt="" />
+    	 <img :src="active_s.pic" alt="" />
     	 <div class="p_box">
-    	 	 <p class="p_box_p1">冲向太空游乐园，和星星月亮一…</p>
-    	 	 <p class="p_box_p2"><a style="color:#C5B2AB;font-size:0.32rem;">¥578</a>&nbsp;&nbsp;&nbsp;¥178</p>
+    	 	 <p class="p_box_p1">{{active_s.title}}</p>
+    	 	 <p class="p_box_p2"><a style="color:#C5B2AB;font-size:0.32rem;">¥{{parseFloat(active_s.price)+200}}</a>&nbsp;&nbsp;&nbsp;¥{{active_s.price}}</p>
     	 </div>
     </div>
     
@@ -13,24 +14,24 @@
     	 <van-icon name="wechat" size='0.606666rem' color='#1CB14E' /><p>微信支付</p> 
     	 <a><van-icon name="checked" size='0.606666rem' color='#F55656' /></a>
     </div>
-    <p class="you_p">优惠券</p>
+    <!--<p class="you_p">优惠券</p>-->
     
-    <div @click.stop class="you_det">
-    	<p>{{you_title}}</p>
+    <!--<div @click.stop class="you_det">
+    	<p>{{you_title}}元优惠券</p>
     	<div @click="you_show=!you_show" class="you_det_btn"><van-icon size='0.333333rem' name="arrow-down"/></div>
     	<div class="you_det_tab" :class="{you_det_tab_1:you_show==false,you_det_tab_2:you_show==true}">
-    		 <div v-show="you_show" v-for="(i,index) in you_act" @click="you_click(i,index)" class="you_det_tab_c">{{i}}</div>  
+    		 <div v-show="you_show" v-for="(i,index) in you_act" @click="you_click(i,index)" class="you_det_tab_c">{{i.amount}}元优惠券</div>  
     	</div>
-    </div>
+    </div>-->
   
     <div class="bto_box">
-  	  <p class="bto_box_p">实付金额：&nbsp;<a style="color:#F55656;font-weight:400;">¥168.00</a></p>
+  	  <p class="bto_box_p">实付金额：&nbsp;<a style="color:#F55656;font-weight:400;">¥{{active_s.price}}</a></p>
   	  <div @click="pay_click" class="bto_box_btn">立即支付</div>
     </div>
     
     
 <!--弹出是否确认退出----------------------------------------------------------------------------------------------->
-     <mu-fade-transition>
+    <mu-fade-transition>
            <div class="meng" v-show="show1">
            	    <mu-scale-transition>
            	      <div v-show="show1" class="meng_box">
@@ -47,49 +48,107 @@
    
 <!---猜你喜欢--------------------------------------------------------------------------------------------------------->   
    <mu-fade-transition>
-    <div class="meng" v-show="show4"> 
+   <div class="meng" v-show="show4"> 
    <mu-scale-transition>
            <div class="ymal_box" v-show="show4">
            	      <p class="ymal_box_title">猜你喜欢</p> 	
-           	      <div v-for="i in 4" class="val_box">
-           	      	  <img src="../../../dist/static/img/b_bb.860082c.png" alt="" />  
-           	      	   <p class="val_box_p">冲向太空游乐园，和…</p> 
-           	      	    <p class="val_box_p2">¥231.00</p>
+           	      <div v-for="i in cai_active" @click="go_cai(i)" class="val_box">
+           	      	  <img :src="i.pic" alt="" />  
+           	      	   <p class="val_box_p">{{i.synopsis}}</p> 
+           	      	    <p class="val_box_p2">¥{{i.price}}</p>
            	      </div>
-           	      <img @click="to_home" class="ymal_box_img" src="../../../static/img/guanbi.png" alt="" />	
+           	      <img @click="to_home" class="ymal_box_img" src="static/img/guanbi.png" alt="" />	
            </div>
     </mu-scale-transition>
     </div>
   </mu-fade-transition> 
     
-    
-    
-   
   </div>
 </template>
 
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
 export default {
   
   data () {
     return {
-    	show4:false,
-    	show1:false,
-    	
+       logins:true,
+       show4:false,
+       show1:false,
        you_show:false,
-       you_act:['20元优惠券','30元优惠券','40元优惠券'],
-       you_title:'20元优惠券',
+       you_act:[],
+       you_title:'',
+       active_s:{},//商品数据
        
+       cai_active:'',//猜你喜欢数据
     }
   },
  
   methods:{
+  	go_cai(i){
+  		  
+  		  localStorage.video_id = i.id;
+	 	    router.push({
+	   	     path:'./Course_details'
+	   	  }) 
+	   	  location.reload();
+  	},
+  	
+  	git_cai_act(id){//获取猜你喜欢数据
+  		
+  		 axios.get(store.state.urls+'api/order/guesslike?type='+id
+        	      ).then(res=>{
+        	      	 console.log(res.data,'猜你喜欢数据')
+                  if(res.data.code==200){
+                  	  
+                  	  this.cai_active = res.data.data
+                  	     
+                  }
+                }).catch(err=>{
+                         
+              }); 
+  	},
+  	
+  	
+  	git_act(){//获取数据
+  		 const loading = this.$loading({
+  	  	   color:'#FEE045',
+  	  	   text:'加载中...'
+  	     });
+  	    axios({
+            method:"post",
+            url:"order/showOrder",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:localStorage.group_id,
+                 token:localStorage.api_token1
+             }
+           }).then(res=>{
+           	   console.log(res.data)
+                  if(res.data.code==200){
+//      	      		 this.you_act = res.data.data.coupons.long.concat(res.data.data.coupons.sort);//优惠券数据
+//      	      		 this.you_title = this.you_act[0].amount;
+        	      		 this.active_s = res.data.data.group;
+//      	      		 console.log(this.you_act,'优惠券');
+        	      		 console.log( this.active_s,'商品数据');
+        	      		 
+        	      		 loading.close();
+        	      		 this.git_cai_act(this.active_s.type_id);//获取猜你喜欢数据
+        	      }   
+        	      
+             }).catch(err=>{
+                     
+             });
+  	},
+  	
   	to_home(){
   		 router.push({
   		 	   path:'/Course_selection'
   		 }) 
+  		 location.reload()
   	},
      give_up(){//确认放弃订单弹出，猜你喜欢
      	this.show1 = false;
@@ -97,18 +156,48 @@ export default {
      },
 
   	pay_click(){
-  		router.push({
-  		 	   path:'/details_Pcompleted'
-  		 }) 
+		const loading = this.$loading({
+	  	   color:'#FEE045',
+	  	   text:'加载中...'
+	   });
+		axios({
+            method:"post",
+            url:"order/buyOrder",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 id:this.active_s.id,
+                 token:localStorage.api_token1
+             }
+           }).then(res=>{
+           	   console.log(res.data)
+              if(res.data.code==200){
+        	      		
+        	      		 router.push({
+		 	                path:'/details_Pcompleted'
+		                 }) 
+        	      }   
+        	      loading.close();
+             }).catch(err=>{
+                     loading.close();
+             });
+  		
   	},
   	   you_click(i,index){
-  	      this.you_title = i 	
+  	      this.you_title = i.amount 	
   	      this.you_show = false
   	   },
   	   
   },
+  
+  created(){
+  	    
+  },
+  
   mounted(){
-  	  
+  	
+  	        this.git_act(); 
+  	       
   	        pushHistory();  
             var bool=false;  
             setTimeout(function(){  
@@ -125,11 +214,13 @@ export default {
                 title: "title", 
                 url: "#"  
             };  
-            window.history.pushState(state, "title", "#");  
+            window.history.pushState(state, "title", "#/details_Confirm_Order");  
         }	
-            
-  	   store.state.btn_show = false;
+  	       store.state.btn_show = false;
+  	     
+  	    localStorage.video_show='true'
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
+       
   }
 }
 </script>
@@ -379,6 +470,7 @@ export default {
 		  width: 1.866666rem;
 		  height: 1.866666rem;
 		  float: left;
+		  background: #C0C0C0;
 	}
      .kevalue{
      	 width: 100%;

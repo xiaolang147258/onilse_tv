@@ -10,17 +10,19 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "jquery": "^2.2.1",
     "muse-ui": "^3.0.1",
     "muse-ui-loading": "^0.2.0",
     "muse-ui-message": "^0.2.1",
     "muse-ui-toast": "^0.3.0",
+    "pili-rtc-web": "^2.0.0-patch.4",
     "vant": "^1.4.8",
+    "video.js": "^7.4.1",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vue-video-player": "^5.0.2",
-    "vuex": "^3.0.1",
-    "jquery":"^2.2.1"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

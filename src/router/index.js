@@ -6,7 +6,7 @@ import see_more from '@/components/Elective_course/see_more.vue'
 import Course_details from '@/components/Elective_course/Course_details.vue'
 import details_Verify_phone from '@/components/Elective_course/details_Verify_phone.vue'
 import details_Confirm_Order from '@/components/Elective_course/details_Confirm_Order.vue'
-
+import shua_xin from '@/components/Elective_course/shua_xin.vue';//刷新首页
 import details_Payment_completed from '@/components/Elective_course/details_Payment_completed.vue'
 
 import mine from '../components/mines/mine.vue'
@@ -16,7 +16,6 @@ import My_courses03 from '@/components/mines/My_courses03.vue'
 import my_collection05 from '@/components/mines/my_collection05.vue'
 import Browse_record06 from '@/components/mines/Browse_record06.vue'
 import coupon04 from '@/components/mines/coupon04.vue'
-//import hello4 from '../components/hello4'
 
 
 
@@ -31,6 +30,7 @@ export default new Router({
     {path: '/details_Verify_phone',meta:{title:'完善信息'},component:details_Verify_phone},
     {path: '/details_Confirm_Order',meta:{title:'确认订单信息'},component:details_Confirm_Order}, 
     {path: '/details_Pcompleted',meta:{title:'支付完成'},component:details_Payment_completed},
+    {path: '/shua_xin',meta:{title:'热门精选'},component:shua_xin},
     
     {path:'/mine',meta:{title:'个人中心'},component:mine},
     {path:'/Personal_information',meta:{title:'个人信息'},component:Personal_information},
@@ -41,7 +41,6 @@ export default new Router({
     {path:'/coupon04',meta:{title:'优惠券'},component:coupon04},
     
     {path:'/*',meta:{title:'素质教育课程中心'},component: Course_selection},
-       
-     
+      
   ]
 })

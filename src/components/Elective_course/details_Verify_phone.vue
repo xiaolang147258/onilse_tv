@@ -2,11 +2,11 @@
   <div id="hello" style="width:100%;background: white;">
    
        <div class="titles">
-      	  <img class="titles_img" src="../../../static/img/b_bb.png" alt="" />
+      	  <img class="titles_img" :src="active_s.pic" alt="" />
       	  <div class="titles_val_box">
-      	  	 <img src="../../../static/img/b_bb.png" alt="" />  
+      	  	 <img :src="active_s.pic" alt="" />  
       	  	 <div class="titles_val_box_box">
-      	  	 	 <p>冲向太空游乐园，和星星月亮一起玩耍</p>
+      	  	 	 <p>{{active_s.synopsis}}</p>
       	  	 </div>
       	  </div>
       </div>
@@ -31,6 +31,7 @@
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
+import axios from 'axios'
 export default {
   
   data () {
@@ -39,6 +40,8 @@ export default {
     	btn_show:true,//获取验证码按钮的状态
     	iphone_value:'',//手机号码
     	yan_value:'',//验证码
+    	
+    	active_s:'',
     }
   },
   computed:{
@@ -50,11 +53,29 @@ export default {
   	},
   	
   	tj_click(){//提交按钮被点击
-  		 
-  		router.push({
-  		 	   path:'/details_Confirm_Order'
-  		 }) 
-  		 
+  	    axios({
+            method:"post",
+            url:"user/editPhone",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 phone:this.iphone_value,
+                 token:localStorage.api_token1,
+                 code:this.yan_value
+             }
+            }).then(res=>{
+            	        console.log(res.data)
+                      if(res.data.code==200){
+                      	this.$toast.success({message:'成功绑定手机',time:1000});
+                      	 window.setTimeout(()=>{
+  	   	      	        	  router.push({
+  		 	                         path:'/details_Confirm_Order'
+  		                     }) 
+  	   	             	  },1000);
+                      }
+             }).catch(err=>{
+                      console.log(err);
+             });
   	},
   	
   	
@@ -62,19 +83,69 @@ export default {
   	   if(!(/^1[3456789]\d{9}$/.test(this.iphone_value))){
   	   	      this.$toast.error({message:'手机号码格式有误',time:1500}) 
   	   }else{
-  	   	      this.$toast.success({message:'验证码发送成功，十分钟内有效',time:3000})
-  	   	      this.btn_show = false;//使获取验证码按钮变为禁用
-  	   	      window.setTimeout(()=>{
-  	   	      	 this.btn_show = true;//60秒后恢复可用状态
-  	   	      },60000)
+  	   	      
+  	   	   axios({
+            method:"post",
+            url:"user/phoneCode",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 phone:this.iphone_value,
+                 token:localStorage.api_token1
+             }
+            }).then(res=>{
+            	        console.log(res.data)
+                      if(res.data.code==200){
+                      	  this.$toast.success({message:'验证码发送成功，十分钟内有效',time:3000})
+  	   	             	  this.btn_show = false;//使获取验证码按钮变为禁用
+  	   	             	  window.setTimeout(()=>{
+  	   	      	        	  this.btn_show = true;//60秒后恢复可用状态
+  	   	             	  },60000);
+                      }else{
+                      	 this.$toast.success({message:res.data.data,time:3000})
+                      }
+             }).catch(err=>{
+                      console.log(err);
+             });
+  	   	        
+  	   	      
   	   }
   	},
   	
+  	git_act(){//获取数据
+  		 const loading = this.$loading({
+  	  	   color:'#FEE045',
+  	  	   text:'加载中...'
+  	     });
+  	    axios({
+            method:"post",
+            url:"order/showOrder",
+            contentType:"application/json;charset=UTF-8",
+            dataType:"json",
+            data:{
+                 group:localStorage.group_id,
+                 token:localStorage.api_token1
+             }
+           }).then(res=>{
+           	   console.log(res.data)
+                  if(res.data.code==200){
+
+        	      		 this.active_s = res.data.data.group;
+        	      		 console.log( this.active_s,'商品数据');
+        	      		 
+        	      		 loading.close();
+        	      }   
+        	      
+             }).catch(err=>{
+                     
+             });
+  	},
   	
   	
   },
   mounted(){
-  	  
+  	   this.git_act()
+  	   localStorage.video_show='true'
   	  store.state.btn_show = false;
 	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
   }
@@ -179,7 +250,7 @@ export default {
   	  height: 4.133333rem;
   	  border-radius: 0.20666rem;
   	  overflow: hidden;
-  	  background: #87CEFA;
+  	  background:#EEEEEE;
   	  margin: 0.4rem auto;
   	  position: relative;
   	  -moz-box-shadow:0em 0.5em 2em #9E9E9E; -webkit-box-shadow:0em 0.5em 2em #9E9E9E; box-shadow:0em 0.5em 2em #9E9E9E;
