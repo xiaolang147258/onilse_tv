@@ -2,10 +2,6 @@
   <!--课程详情-->
   <div  id="hello" style="width:100%;float:left;padding-bottom:1.3367rem;">
   	
-  	
-    
-    
-
   	 <!--<mu-fade-transition>
           <div id="mengs" v-show="true">
           	 <div>
@@ -22,7 +18,7 @@
      <!--腾讯播放器-------------------------------------------------------------------> 
     	 <!--<div id="videoCon" class="video"></div>-->
      <!--七牛云播放器------------------------------------------------------------------> 	 
-    	 <video v-show="vid!=''" id="demo_video" onended="document.getElementById('video_ss').style.display='block'" class="video-js vjs-big-play-centered"></video>
+    	 <video autoplay="autoplay" v-show="vid!=''" id="demo_video" onended="document.getElementById('video_ss').style.display='block'" class="video-js vjs-big-play-centered"></video>
        
        <div v-if="loading" id="video_ss">
        	  <div  v-if="chak_to">
@@ -58,17 +54,17 @@
      	  <p class="tv_box_bto1_p1">¥{{actives.group.price}}</p>
      	  <div class="tv_box_bto2"> 
      	  	   
-     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=1" class="tv_box_bto2_img"><img :src="actives.group.buyusers?actives.group.buyusers[0]:''" alt="" /></div>
-     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=2" style="z-index:2;right:2.786666rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[1]:''" alt="" /></div>
-     	  	   <div v-show="actives.group.period!=0&&actives.group.period>=3" style="z-index:1;right:2.333333rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[2]:''" alt="" /></div>
+     	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=1" class="tv_box_bto2_img"><img :src="actives.group.buyusers?actives.group.buyusers[0]:''" alt="" /></div>
+     	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=2" style="z-index:2;right:2.786666rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[1]:''" alt="" /></div>
+     	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=3" style="z-index:1;right:2.333333rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[2]:''" alt="" /></div>
      	  	   
-     	  	   <p class="tv_box_bto2_p">{{actives.group.period}}<a style="color: #C5B2AB;">人已购买</a></p>
+     	  	   <p class="tv_box_bto2_p">{{actives.group.buynum}}<a style="color: #C5B2AB;">人已购买</a></p>
      	  	   
      	  </div>
      </div>
      
      <div class="to_tv_numder">
-     	    <p class="to_tv_numder_p">{{actives.group.period}}课节 | {{actives.group.adaptcrowd}}岁</p>
+     	    <p class="to_tv_numder_p">{{actives.node.length}}课节 | {{actives.group.adaptcrowd}}岁</p>
      	    <div class="to_tv_numder_btn"><van-icon class='dou' name="info-o"/>&nbsp;服务说明</div>
      </div>
      
@@ -80,7 +76,7 @@
      
 <!--课程详情------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
     
-    <div v-html="actives.group.details" id="aws1"></div>
+    <div v-html="actives.group.details" id="aws1" class="awsaa"></div>
     	   
 <!--课程目录------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->     
     <div id="aws2">
@@ -90,11 +86,10 @@
     	   <div class="aws2_title_2"></div>
     	<!----------------------------------------------------------------------------------------->   
     	   <div v-for="(i,index) in actives.node" @click="aws_tabsclick(i,index)" class="aws_tabs">
-    	   	     <p class="aws_tabs_p1" :class="{tv_box_tab_tits:adl==index}">【{{i.status==2||localStorage.vip_id==1?'免费':'收费'}}】{{i.title}}>
+    	   	     <p class="aws_tabs_p1" :class="{tv_box_tab_tits:adl==index}">【{{i.status==2||vip_id==1?'免费':'收费'}}】{{i.title}}>
     	   	     <div v-if="adl==index"  class="aws_tabs_btn">正在播放&nbsp;<van-icon name="play" /></div>
     	   	     <p v-else class="aws_tabs_p2">50：53</p>
     	   </div>
-    	   
     </div>
      
 <!--用户评价------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->     
@@ -102,8 +97,7 @@
     	  <div class="aws2_title" style="margin-bottom:0.453333rem;">
     	   	  <p class="aws2_title_p1">课程评价</p><div class="aws2_title_div"></div>
     	   	  <p class="aws2_title_p">(累计<a>{{actives.group.count}}</a>条)</p>
-    	   </div>
-    	  
+    	  </div>
     	   <div v-for="(i,index) in actives.comment" class="aws_pin_tab">
     	   	    <div class="aws_pin_tab_a">
     	   	    	   <p class="aws_pin_tab_a_name">{{i.nickname}}</p><p class="aws_pin_tab_a_date">{{i.created_at}}</p>
@@ -118,14 +112,13 @@
         <div @click="git_commit" class="logins">{{actives.comment.length==0?'暂时没有评论':btn_val}}</div>  
     </div>
 <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->  
-
 <mu-scale-transition>
   <img v-show="to_top_show" @click="to_top" class="ding" src="static/img/zhiding.png" alt="" />
 </mu-scale-transition>
 
 <!--底部购买||评论栏----------------------------------------------------------------------------------------------------->     
   <!--用户购买后展示--> 
-   <div v-if="Whether_to_buy" @touchmove.prevent class="pin_btn">
+   <div v-if="Whether_to_buy||vip_id==1" @touchmove.prevent class="pin_btn">
    	 <!--<div v-if="true" @touchmove.prevent class="pin_btn">-->
    	 	  
     	   <a href="tel:18924319390">
@@ -136,10 +129,10 @@
     	  </a>
     	  
     	   <div class="pin_btn_zi">
-    	   	   <img @click="cherk_click" :src="check?'static/img/shoucahng.png':'static/img/yishoucahng.png'" alt="" />
+    	   	   <img @click="cherk_click" :src="check?'static/img/yishoucahng.png':'static/img/shoucahng.png'" alt="" />
     	   	   <p>收藏</p>
     	   </div>	   
-    	   <div @click="show1=true" class="right_btn">发表评论</div>
+    	   <div @click="pinss" class="right_btn">发表评论</div>
     </div>
   <!--用户未购买时展示-->  
     <div v-else @touchmove.prevent class="pin_btn">
@@ -150,7 +143,7 @@
     	   </div>
     	  </a>
     	   <div class="pin_btn_zi">
-    	   	   <img @click="cherk_click" :src="check?'static/img/shoucahng.png':'static/img/yishoucahng.png'" alt="" />
+    	   	   <img @click="cherk_click" :src="check?'static/img/yishoucahng.png':'static/img/shoucahng.png'" alt="" />
     	   	   <p>收藏</p>
     	   </div>	  
     	   <div @click="to_buy" class="right_btn">立即购买</div>
@@ -169,14 +162,13 @@
               	  	  <a class="meng_pin_top_xing"><van-rate v-model="values1" /></a><p class="meng_pin_top_p">满意</p>
               	  </div>
               	 <div style="width:6.866666rem;margin: 0 auto;">
-              	     <textarea @blur="inp_show" v-show="show1" placeholder="想说点什么呢！,200字以内" class="texts" v-model="text_val" onkeydown="if(event.keyCode==32||event.keyCode==13){return false;}" maxlength="200" rows="" cols=""></textarea> 
+              	     <textarea  @blur="inp_show" v-show="show1" placeholder="想说点什么呢！,200字以内" class="texts" v-model="text_val" onkeydown="if(event.keyCode==32||event.keyCode==13){return false;}" maxlength="200" rows="" cols=""></textarea> 
               	 </div>
               	 
               	 <div class="meng_pin_bto">
               	 	     <div @click="show1=false" class="meng_pin_bto_btn1">取消</div>
               	 	     <div @click="add_commit_s" class="meng_pin_bto_btn2">发布</div>
               	 </div>
-              	 
               </div>
             </mu-slide-bottom-transition>
            </div>
@@ -190,6 +182,8 @@
 </template>
 
 <script>
+	
+	
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
 import axios from 'axios'
@@ -251,7 +245,10 @@ export default {
   },
   
   methods:{
-  	
+  	pinss(){
+  		 this.show1=true;
+  		 
+  	},
   	
   	text_jiao(){
 //		 $('.texts').focus();
@@ -287,9 +284,13 @@ export default {
             }).then(res=>{
             	      console.log(res.data)
                     if(res.data.code==200){
-                    	  this.$toast.success('评论成功');
+                    	  
+                    	   this.$toast.success({
+  		   	     	          message:'评论提交成功，审核通过后将会展示，非常感谢！',
+  		   	     	          time:'4000'
+  		   	              })
                     	  this.show1 = false;
-                    	  this.git_active()
+//                  	  this.git_active()
                     	  this.text_val = ''
                     }
              }).catch(err=>{
@@ -312,12 +313,13 @@ export default {
             dataType:"json",
             data:{
                  group:this.actives.group.id,
+                 token:localStorage.api_token1
              }
             }).then(res=>{
             	        console.log(res.data);
                       if(res.data.code==200){
-//                    	  this.check = true; 
-//                        this.$toast.info('已取消收藏');
+                      	  this.check = false; 
+                          this.$toast.info('已取消收藏');
                       }
              }).catch(err=>{
                       console.log(err);
@@ -325,7 +327,7 @@ export default {
   	},
   	
   	cherk_click(){ 	//点击收藏
-  		if(this.check){
+  		if(this.check==false){
   		   axios({
             method:"post",
             url:"collect/add",
@@ -339,7 +341,7 @@ export default {
             }).then(res=>{
             	        console.log(res.data);
                       if(res.data.code==200){
-                      	  this.check = false; 
+                      	  this.check = true; 
                           this.$toast.success('收藏成功');
                       }
              }).catch(err=>{
@@ -404,7 +406,13 @@ export default {
   		  axios.get(store.state.urls+'api/videos/details?id='+localStorage.video_id+'&token='+localStorage.api_token1
         	      ).then(res=>{
                   if(res.data.code==200){
+                  	
+                  	     console.log(res.data);
+                  	    
                   	     this.actives = res.data.data;
+                  	     
+                  	     this.actives.group.buyusers= this.actives.group.buyusers?this.actives.group.buyusers.reverse():this.actives.group.buyusers;
+                  	     
                   	     console.log(this.actives,'视频详情数据');
                   	    
                   	     this.loading = true;
@@ -462,8 +470,8 @@ export default {
                       	 this.vid = this.actives.node[0].videos;
                       	 this.aws2_index = 0;
                       }else{//没有购买先判断第一节课是否免费-如果免费就加载第一节课，否则不加载课程页面展示需要付费
-                      	 this.vid = this.actives.node[0].status==2?this.actives.node[0].videos:'';
-                      	 if(this.actives.node[0].status==2){
+                      	 this.vid = this.actives.node[Number(localStorage.index)].status==2?this.actives.node[0].videos:'';
+                      	 if(this.actives.node[Number(localStorage.index)].status==2){
                       	 	  this.aws2_index=0
                       	 }else{
                       	 	  this.aws2_index='o'
@@ -527,7 +535,8 @@ export default {
   	 	 if(this.Whether_to_buy==true||localStorage.vip_id==1){//是收费项的话，再判断用户是否已经购买--如果已经购买，则加载视屏，自动滑动到顶部
   	 	 	  this.aws2_index = index;
   	 	 	  this.vid = i.videos;
-  	 	 	  localStorage.index = index
+  	 	 	  localStorage.index = index;
+  	 	 	  localStorage.video_show=2;//控制播放器变成自动播放
   	 	    location.reload()
   	 	 	  this.tv_git() 
   	 	 	  $("html, body").animate({scrollTop:0});  
@@ -545,7 +554,8 @@ export default {
   	 }else{//判断为免费项则加载视频，自动滑动到顶部
   	 	  this.aws2_index = index;
   	 	  this.vid = i.videos;
-  	 	  localStorage.index = index
+  	 	  localStorage.index = index;
+  	 	  localStorage.video_show=2;//控制播放器变成自动播放
   	 	  location.reload()
 //      store.state.dat.Initializationadd(i.videos)
 	 	    
@@ -632,14 +642,30 @@ handleScroll(){//监测滑动
       	   localStorage.video_show='false'
        }
       
-  
       
+      //控制用户点击返回键
+        window.addEventListener("popstate",function(e){
+            if(localStorage.videosa == 2){
+            	router.push({
+		 	           path:'/Course_selection'
+		          });
+            	localStorage.videosa=1;
+            	loading.close();
+            }
+        });
+      
+      window.setTimeout(()=>{
+      	  $("#aws1 img").css('width','100%');
+      },100)
       
   },
   computed:{
   	  adl(){
   	  	 return Number(localStorage.index)
   	  },
+  	 vip_id(){
+  	 	  return localStorage.vip_id
+  	 }
   	   
   },
   
@@ -648,6 +674,11 @@ handleScroll(){//监测滑动
 </script>
 
 <style scoped>
+	
+	.MsoNormal,td{
+		 width: 100%;
+	}
+	
 	#mengs{
 		 width: 100%;
 		 height: 100%;
@@ -691,7 +722,7 @@ handleScroll(){//监测滑动
 		 text-align: center;
 		 font-size: 0.333333rem;
 		 color: #6E4C45;
-		 padding-top: 1.093333rem;
+		 padding-top: 1.93333rem;
 		 position: absolute;
 		 top: 0;
 		 left: 0;
@@ -951,7 +982,7 @@ handleScroll(){//监测滑动
 		  /*background:#E6E6E6;*/
 	 	  margin: 0.8rem auto;
 	}
-	#aws1 img{
+	#aws1 p img{
 		  width: 100%;
 	}
 	 #aws1{
@@ -1043,7 +1074,7 @@ handleScroll(){//监测滑动
 		 height: 0.666666rem;
 		 border-radius: 50%;
 		 border:0.025333rem solid white;
-		 background: deepskyblue;
+		 /*background: deepskyblue;*/
 		 position: absolute;
 		 top: 0.25rem;
 		 right: 3.24rem;

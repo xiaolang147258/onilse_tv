@@ -50,7 +50,7 @@ export default {
   	   	}) 	
   	  },
   	  go_ac(i){
-  	  	localStorage.video_id = i.id;
+  	  	localStorage.video_id = i.videos_group_id;
 	 	    router.push({
 	   	     path:'./Course_details'
 	   	  }) 
@@ -85,6 +85,7 @@ export default {
   	   this.git_act()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
+  	  localStorage.video_show='true'
   	  store.state.bottom = 'mine'
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
   }

@@ -40,15 +40,20 @@ import axios from 'axios'
 Vue.prototype.axios = axios;
 axios.defaults.baseURL='/api'; 
 
-import Swiper from 'swiper'; 
-import 'swiper/dist/css/swiper.min.css';
+//import Swiper from 'swiper'; 
+//import 'swiper/dist/css/swiper.min.css';
 
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
+Vue.use(VueAwesomeSwiper, /* { default global options } */)
 
 //import VideoPlayer from 'vue-video-player'
 //require('vue-video-player/node_modules/video.js/dist/video-js.css')
 //require('vue-video-player/src/custom-theme.css')
 //Vue.use(VideoPlayer)
 
+
+//import 'babel-polyfill'
 
 
 import $ from 'jquery'

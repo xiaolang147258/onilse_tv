@@ -18,8 +18,8 @@
        	   	   	 <p class="title">{{i.title}}</p> 
        	   	   	 <p class="title_c">上次学习日期：{{i.created_at}}</p>
        	   	   	 <div class="title_d">
-       	   	   	 	<img src="../../../static/img/xuexijindu.png" alt="" /><p>学习进度：30%</p> 
-       	   	   	 	<div @click="go_details(i.id)" class="btns">继续学习</div>
+       	   	   	 	<!--<img src="../../../static/img/xuexijindu.png" alt="" /><p>学习进度：30%</p>--> 
+       	   	   	 	<div @click="go_details(i.group_id)" class="btns">继续学习</div>
        	   	   	 </div>
        	   	   </div>
        	   </div>
@@ -88,8 +88,8 @@ export default {
   	   
   },
   mounted(){
-  	  
-  	  this.git_ding()
+  	   localStorage.video_show='true'
+  	   this.git_ding()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine'

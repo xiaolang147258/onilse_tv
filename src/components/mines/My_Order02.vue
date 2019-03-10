@@ -17,14 +17,14 @@
        	    <div class="aws_tab_box_t1">
        	    	
        	    	<div id="img_box">
-       	    		 <img v-if="img_show==false" style="width:50%;height:50%;margin-top:0.433333rem;" src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
-       	    		 <img v-else @load="img_show=true" :src="i.pic" alt="" />
+       	    		 <!--<img v-if="img_show==false" style="width:50%;height:50%;margin-top:0.433333rem;" src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />-->
+       	    		 <img  @load="img_show=true" :src="i.pic" alt="" />
        	    	</div>
        	    	 
        	    	 <div class="aws_tab_box_t1_c">
        	    	 	<div class="aws_tab_box_t1_c1"><p>{{i.title}}</p><a>¥{{i.amount}}</a></div>
        	    	 	<p class="go_dan">下单日期：{{i.created_at}}</p>	     
-       	    	 	<p v-show="tab_show!=0" style="margin-top:0.16rem;" class="go_dan">下单日期：{{i.updated_at}}</p>	
+       	    	 	<p v-show="tab_show!=0" style="margin-top:0.16rem;" class="go_dan">支付日期：{{i.updated_at}}</p>	
        	    	 </div>
        	    </div>
        	    <div class="aws_tab_box_t2">
@@ -140,6 +140,7 @@ export default {
   	  $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine';
+  	  localStorage.video_show='true'
   }
 }
 </script>

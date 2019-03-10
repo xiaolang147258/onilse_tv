@@ -44,7 +44,7 @@ export default {
   },
   methods:{
   	 go_xa(i){
-  	 	  localStorage.video_id = i.id;
+  	 	  localStorage.video_id = i.videos_group_id;
 	 	    router.push({
 	   	     path:'./Course_details'
 	   	  }) 	
@@ -60,6 +60,12 @@ export default {
         	      	 if(res.data.code==200){
         	      	 	  console.log(res.data.data.data,'订单数据');
         	      	 	  this.actives = res.data.data.data;
+        	      	 	  if(this.actives){
+        	      	 	  	 for(var i=0;i++;i<this.actives.length){
+        	      	 	  	 	    this.actives[i].pic+'-dbsf'
+        	      	 	  	 }
+        	      	 	  }
+        	      	 	  this.actives = this.actives?this.actives:[];
         	      	 	  this.act_show = this.actives.length==0?true:false;
 	  	    	          loading.close();
         	      	 }else{
@@ -87,7 +93,8 @@ export default {
   	   this.git_act()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
-  	  store.state.bottom = 'mine'
+  	  store.state.bottom = 'mine';
+  	  localStorage.video_show='true'
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
   }
 }

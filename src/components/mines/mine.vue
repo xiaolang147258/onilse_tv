@@ -177,12 +177,11 @@ export default {
   mounted(){
   	  this.get_index();
   	  this.git_ding();
-  	  
-  	  
+  	  localStorage.video_show='true'//重置播放器
   	  $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = true;
   	  store.state.bottom = 'mine'
-	  document.getElementById('tuch_boxss').style.height = document.documentElement.clientHeight*0.92+'px';
+	    document.getElementById('tuch_boxss').style.height = document.documentElement.clientHeight*0.92+'px';
   }
 }
 </script>

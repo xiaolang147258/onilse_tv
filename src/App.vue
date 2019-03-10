@@ -49,14 +49,12 @@ export default {
   	btn1(){
   	  router.push({
   	   	 path:'./Course_selection',
-  	   	 
   	   });
   	    this.$store.state.bottom='Elective course';
   	},
   	btn2(){
   	    router.push({
   	   	 path:'./mine',
-  	   	 
   	   	});
   	    this.$store.state.bottom='mine';
   	},

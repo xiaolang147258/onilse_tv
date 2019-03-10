@@ -16,7 +16,7 @@
       	  <p id="names">{{usernames}}</p>
       </div>
       
-      <div @click="diqu" class="name_box"> 
+      <div class="name_box"> 
       	  <p>地区</p> 
       	  <van-icon size='0.4rem' color='#6E4C45' name="arrow" />
       	  <p id="names">{{areas_s}}</p>
@@ -34,8 +34,6 @@
       	  <p id="names">{{ages_s}}</p>
       </div>
       
- 
- 
 <!--昵称修改--> 
     <mu-fade-transition>
        <div @touchmove.prevent @click='show=false' class="meng" v-show="show">

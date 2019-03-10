@@ -35,8 +35,8 @@
            <div class="meng" v-show="show1">
            	    <mu-scale-transition>
            	      <div v-show="show1" class="meng_box">
-           	      	  <div class="meng_box_tit">取消订单</div>
-           	      	  <div class="meng_box_val">是否放弃该订单？</div>
+           	      	  <div class="meng_box_tit">取消支付</div>
+           	      	  <div class="meng_box_val">是否放弃支付？</div>
            	      	  <div class="meng_box_btn">
            	      	  	  <div @click="give_up" class="meng_box_btn_c1">确认放弃</div>    
            	      	  	  <div @click="show1=false" style="color:#F55656;border:none;font-weight:bold;" class="meng_box_btn_c1">继续支付</div> 
@@ -54,7 +54,7 @@
            	      <p class="ymal_box_title">猜你喜欢</p> 	
            	      <div v-for="i in cai_active" @click="go_cai(i)" class="val_box">
            	      	  <img :src="i.pic" alt="" />  
-           	      	   <p class="val_box_p">{{i.synopsis}}</p> 
+           	      	   <p class="val_box_p">{{i.title}}</p> 
            	      	    <p class="val_box_p2">¥{{i.price}}</p>
            	      </div>
            	      <img @click="to_home" class="ymal_box_img" src="static/img/guanbi.png" alt="" />	
@@ -88,7 +88,7 @@ export default {
  
   methods:{
   	go_cai(i){
-  		  
+  		  localStorage.videosa = 2;
   		  localStorage.video_id = i.id;
 	 	    router.push({
 	   	     path:'./Course_details'
@@ -155,34 +155,47 @@ export default {
      	this.show4 = true;
      },
 
-  	pay_click(){
-		const loading = this.$loading({
-	  	   color:'#FEE045',
-	  	   text:'加载中...'
-	   });
-		axios({
-            method:"post",
-            url:"order/buyOrder",
-            contentType:"application/json;charset=UTF-8",
-            dataType:"json",
-            data:{
-                 id:this.active_s.id,
-                 token:localStorage.api_token1
-             }
-           }).then(res=>{
-           	   console.log(res.data)
-              if(res.data.code==200){
-        	      		
-        	      		 router.push({
-		 	                path:'/details_Pcompleted'
-		                 }) 
-        	      }   
-        	      loading.close();
-             }).catch(err=>{
-                     loading.close();
-             });
-  		
+  	pay_click(){//用户点击确认支付
+		
+       axios.get(store.state.urls+'api/order/pay-stra?token='+localStorage.api_token1+'&out_trade_no='+this.active_s.uid
+        	     ).then(res=>{
+                  if(res.data.code==200){
+                  	  
+                  	 console.log(res.data.data.jsApiParameters,'数据')
+                  	 const pay_params = res.data.data.jsApiParameters;
+                  	 
+                     if(typeof WeixinJSBridge == "undefined"){
+                     	if( document.addEventListener ){
+                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                        }else if (document.attachEvent){
+                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        }
+                     }else{
+                     	this.onBridgeReady(pay_params);
+                     }
+                  	     
+                  }else{
+                  	 this.$toast.error('发生了错误')
+                  }
+                }).catch(err=>{
+                         
+              });      	      
+              	  
   	},
+  	onBridgeReady(params){
+            const pay_params = JSON.parse(params);
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest',pay_params,
+                function(res){
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                        router.push({
+		 	                path:'/details_Pcompleted'
+		                 })  
+                } 
+            }); 
+        },
+  	
   	   you_click(i,index){
   	      this.you_title = i.amount 	
   	      this.you_show = false
@@ -195,9 +208,7 @@ export default {
   },
   
   mounted(){
-  	
-  	        this.git_act(); 
-  	       
+  	        this.git_act();
   	        pushHistory();  
             var bool=false;  
             setTimeout(function(){  
@@ -209,13 +220,13 @@ export default {
                 }  
                 pushHistory();  
             }, false);  
-           function pushHistory() {  
+           function pushHistory(){  
             var state = {  
                 title: "title", 
                 url: "#"  
             };  
             window.history.pushState(state, "title", "#/details_Confirm_Order");  
-        }	
+           }	
   	       store.state.btn_show = false;
   	     
   	    localStorage.video_show='true'

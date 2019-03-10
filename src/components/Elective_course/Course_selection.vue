@@ -5,9 +5,7 @@
     	描述：首页
     -->
   <div id="hello" style="width:100%;background:#FFFFFF;border-top: 0.013333rem solid #DEDEDE;padding-bottom: 1.306rem;padding-top: 1.633333rem;">
-    
-    
-    
+   
     <div v-show="showss_s" style="position:fixed; width:100%; height:100%;top: 0;left: 0;z-index:500;"></div>
     
 <!--顶部导航滑动区---------------------------------------------------------------------------------------------------> 
@@ -22,9 +20,11 @@
 <!--轮播区域---------------------------------------------------------------------------------------------------->  
     <mu-scale-transition> 
      <div v-show="showss" style="width:100%;height:5.066666rem;position: relative;">
-      	  <div class="swiper-container">
-          	  <div class="swiper-wrapper">
-              	  <div v-for="(i,index) in swiper_act" @click="to_click(i)" style="width:7.866666rem;height: 4.53rem;overflow:hidden;" class="swiper-slide">
+      	  <!--<div class="swiper-container">-->
+          	  <!--<div class="swiper-wrapper">-->
+          	  	
+              	 <swiper :options="swiperOption">
+              	 	<div v-for="(i,index) in swiper_act" @click="to_click(i)" style="width:7.866666rem;height: 4.53rem;overflow:hidden;" class="swiper-slide">
               	  	 
               	  	 <div v-show="img_shows==false" id="login_box">
       	 	               <img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
@@ -36,9 +36,9 @@
               	  	   </div>
               	      </mu-scale-transition>
               	  </div>
-              	  
-           	</div>
-      	  </div>
+              	  </swiper>
+           	<!--</div>-->
+      	  <!--</div>-->
       	  <div style="margin: auto;" v-show="tab_lei">
       	      <a><div class="swiper-pagination"></div></a>
          </div>
@@ -53,12 +53,10 @@
       	   	   <img class="tabs_top_img_right" src="static/img/xueshngxinxi_xuanz.png"/>
       	   	   <p @click="to_see_more" class="tabs_top_p_right">查看更多</p>
       	   </div>
-        <mu-scale-transition>    
+        <!--<mu-scale-transition>-->    
           
-          、           
       	   <div  class="tabs_title" v-for="(i,index) in jin_act">
       	   	     <div  class="tabs_title_img" >
-      	   	     	
       	   	     	 <div v-show="img_shows==false" id="login_box" style="margin:0.5rem auto;">
       	 	               <img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
       	             </div>
@@ -80,7 +78,7 @@
       	   	   </div>
       	   </div>
       	 
-      	</mu-scale-transition> 
+      	<!--</mu-scale-transition>--> 
       </div>
      </v-touch>    
     </div>
@@ -111,11 +109,13 @@
       
       
           <!--导航栏筛选没有数据-->
-         
+         <!--<mu-scale-transition>-->
           <div v-show="lan_show==false" class='b_box_box' >
           	   <img class="b_img" src="static/img/ganxiezhichi.png" alt="" />
           	   <p>暂时没有课程，非常感谢您的关注和支持！</p>
           </div>
+         <!--</mu-scale-transition>-->   	
+         
         </div>
         </v-touch>    
     </div>
@@ -134,28 +134,50 @@
 <script>
 import store from '../../vuex/store.js'
 import router from '../../router/index.js'
-import Swiper from 'swiper'; 
-import 'swiper/dist/css/swiper.min.css';
+//import Swiper from 'swiper'; 
+//import 'swiper/dist/css/swiper.min.css';
 import axios from 'axios'
 
 export default{
 	
-  data () {
+  data(){
     return {
     	   tab_lei:true,
     	   jin_act:[],//精选数据列表
-    	   
     	   tab_act:[],//导航栏数据
-    	   
     	   swiper_act:[],//首页轮播数据
-    	   lan_show:false,
+    	   lan_show:true,
     	   showss:false,
     	   show_ss:false,
     	   showss_s:true,
-    	   
     	   img_shows:false,
     	   img_shows2:false,
-    	    
+    	   
+    	   swiperOption: {//初始化swiper
+    	   	 pagination: {
+              el: '.swiper-pagination',
+              bulletElement : 'li',
+           },
+		   	   autoplay:{//自动播放
+       	   delay: 2500,
+       	   stopOnLastSlide: false,
+       	   disableOnInteraction: true,
+       	  },
+		   	  loop:true,
+            effect :'coverflow',
+              slidesPerView:1.2,
+              centeredSlides:true,
+              coverflowEffect:{
+                rotate:5,
+                stretch:-10,
+                depth:40,
+                modifier:3,
+                slideShadows:false
+            },
+            observer:true,//修改swiper自己或子元素时，自动初始化swiper
+            observeParents:true,//修改swiper的父元素时，自动初始化swiper
+    	   },
+    	   
     }
   },
   computed:{
@@ -175,7 +197,6 @@ export default{
                   if(res.data.code==200){
                   	     this.tab_act = res.data.data
                   	     console.log(this.tab_act,'导航栏数据')
-                  	     
                   }
                 }).catch(err=>{
                          
@@ -183,16 +204,24 @@ export default{
              
   	},
   	git_act_2(){//获取视频列表数据
-  		 
 		   axios.get(store.state.urls+'api/videos/index'
         	      ).then(res=>{
+        	      	 console.log(res.data,'视频列表数据')
         	      	 if(res.data.code==200){
-        	      	 	   this.jin_act = res.data.data.data;
-        	      	 	   console.log(this.jin_act,'视频列表数据')
+        	      	 	if(res.data.data.length!=0){
+        	      	 		this.jin_act = res.data.data.data;
+        	      	 	   console.log(this.jin_actres.data,'视频列表数据')
+        	      	 	   if(this.jin_act){
+        	      	 	   	 for(i in this.jin_act){
+        	      	 	   	 	this.jin_act[i].pic+'-dbsf'
+        	      	 	   	 }
+        	      	 	   };
+        	      	 	   this.jin_act=this.jin_act?this.jin_act:[];
         	      	 	   window.setTimeout(()=>{
 //	  	    	              this.show_ss = true
 	  	                 },1500)
-        	      	 	   
+        	      	 	}
+        	      	 	 
         	      	 }
         	      	 
                 }).catch(err=>{
@@ -206,8 +235,8 @@ export default{
 		   axios.get(store.state.urls+'api/slides/index'
         	      ).then(res=>{
         	      	 if(res.data.code==200){
-                        
-                       this.swiper_act = res.data.data
+                        console.log(res,'首页轮播数据')
+                       this.swiper_act = res.data.data;
                        console.log(this.swiper_act,'首页轮播数据')
                        window.setTimeout(()=>{
 //	  	    	              this.showss = true
@@ -223,10 +252,11 @@ export default{
   	
   	
   	to_click(i){
-  		 localStorage.video_id = i.id
-  		 router.push({
-  	   	     path:'./Course_details',
-  	   	})
+//		 localStorage.video_id = i.id
+//		 router.push({
+//	   	     path:'./Course_details',
+//	   	})
+        window.location.href = i.url
   	},
   	go_det(i){
   		  localStorage.video_id = i.id
@@ -282,63 +312,68 @@ export default{
   	},
   	
   	git_swiper(){//初始化swiper
-  		   var mySwiper = new Swiper('.swiper-container',{
-		   	 pagination: {
-              el: '.swiper-pagination',
-              bulletElement : 'li',
-          },
-		   	   autoplay:{//自动播放
-       	   delay: 2500,
-       	   stopOnLastSlide: false,
-       	   disableOnInteraction: true,
-       	  },
-  		   	  loop:true,
-            effect :'coverflow',
-              slidesPerView:1.2,
-              centeredSlides:true,
-              coverflowEffect:{
-                rotate:5,
-                stretch:-10,
-                depth:40,
-                modifier:3,
-                slideShadows:false
-            },
-            observer:true,//修改swiper自己或子元素时，自动初始化swiper
-            observeParents:true,//修改swiper的父元素时，自动初始化swiper
-       })
+//		   var mySwiper = new Swiper('.swiper-container',{
+//		   	 pagination: {
+//            el: '.swiper-pagination',
+//            bulletElement : 'li',
+//        },
+//		   	   autoplay:{//自动播放
+//     	   delay: 2500,
+//     	   stopOnLastSlide: false,
+//     	   disableOnInteraction: true,
+//     	  },
+//		   	  loop:true,
+//          effect :'coverflow',
+//            slidesPerView:1.2,
+//            centeredSlides:true,
+//            coverflowEffect:{
+//              rotate:5,
+//              stretch:-10,
+//              depth:40,
+//              modifier:3,
+//              slideShadows:false
+//          },
+//          observer:true,//修改swiper自己或子元素时，自动初始化swiper
+//          observeParents:true,//修改swiper的父元素时，自动初始化swiper
+//     })
   	},
+  	
   	
   	
   	login_ae(){//微信授权登录
 　            　      var $chars='ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';/****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
 　　               var maxPos = $chars.length;
 　　                 var pwd = '';
-　                for(var i = 0; i < 32; i++){
+
+　               for(var i = 0; i < 32; i++){
 　　　　                 pwd += $chars.charAt(Math.floor(Math.random()*maxPos));
 　　                  }
-        	localStorage.api_token1=(localStorage.api_token1)?localStorage.api_token1:pwd;
-		    
-		     console.log(localStorage.api_token1)
-		     
+         
+         localStorage.api_token1=(localStorage.api_token1&&localStorage.api_token1_show==1)?localStorage.api_token1:pwd;
+         localStorage.api_token1_show = 1;
+         console.log(localStorage.api_token1);
 		 axios({
            method:"GET",
            url:store.state.urls+'api/weixin/checkLogin',
            params:{
              token:localStorage.api_token1,
-             url:location.href
+//           url:location.href
            }
          }).then(res=>{
         	      	 console.log(res.data,'是否登录');
         	      	 if(res.data.code==200){
 //      	      	 	   localStorage.api = res.data.data
-        	      	 	   console.log(res.data.data.api_token,'用户api_token');
-        	      	 	   this.git_ins(res.data.data.api_token)
+        	      	 	   console.log(localStorage.api_token1,'*用户api_token*');
+        	      	 	   this.git_ins(localStorage.api_token1);
+//      	      	 	   localStorage.api_token1 = res.data.data.api_token;
 //      	      	 	   this.$toast.success({
 //		   	     	          message:'登录成功',
 //		   	     	          time:'1000'
-//		   	              })
+//		   	               })
         	      	 }else if(res.data.code==300){//http://video.cieo.com.cn/dist/index.html
         	      	 	  location.href='http://video.cieo.com.cn/api/weixin/login?url=http://video.cieo.com.cn/dist/index.html&token='+localStorage.api_token1
+        	      	 }else if(res.data.code==400){//检测到在新的设备上登录
+        	      	 	  
         	      	 }
                }).catch(err=>{
                       console.log(err)
@@ -355,15 +390,13 @@ export default{
 	  	                  store.state.tou_url = res.data.data.pic
         	      	 }else{
         	      	 	 this.$toast.error('网络错误')
-  	  	                 
         	      	 }
                }).catch(err=>{
                       console.log(err); 
               }); 
   	  },
-  	
-  	
-  	
+  	  
+  	  
   },
   
   created(){
@@ -374,18 +407,19 @@ export default{
   
  
   mounted(){
+  	  localStorage.video_show=1;//控制播放器不要自动播放
   	  
-
-  	   
 //	  localStorage.api = 'asdadasdasdas'
-	  localStorage.api_token1='sZGzrnY4mRDmX83KjPw6djD3Zhei3NSr'
-//	  localStorage.api_token1 = ''
-//    if(localStorage.api){
+
+	  localStorage.api_token1='XSxBxyEPHdxj27PAr4je3dzZ6HQmnWjf'
+	   localStorage.api_token1_show = 1;
+	  
+//	  localStorage.api_token1 ='' 
+//    if(localStorage.api_token1&&localStorage.api_token1!=''){
 //    	  console.log(localStorage);
 //    }else{
-      	  this.login_ae()	
+      	  this.login_ae();
 //    }
-      
       
       this.showss_s = true;
    
@@ -415,7 +449,7 @@ export default{
 //    	  console.log(1111)
 //    }tabs_boxs
 	  
-	  	  document.getElementById('tabs_boxs').style.minHeight = document.documentElement.clientHeight*0.45+'px';
+	  document.getElementById('tabs_boxs').style.minHeight = document.documentElement.clientHeight*0.45+'px';
 	       
   }
 }
@@ -444,12 +478,12 @@ export default{
 		 margin-top: 0.613333rem;
 	}
 	.b_box_box{
-		padding-top:1rem;width:6.066666rem;margin: 0 auto;text-align:center;
+		padding-top:3rem;width:6.066666rem;margin: 0 auto;text-align:center;
+		height: 11rem;
 	}
 	.b_img{
 		  width: 100%;
 		  height: 4rem;
-		  
 	}
 	
 	.swiper-slide{
@@ -571,7 +605,6 @@ export default{
 		 /*float: left;*/
 		 /*background:red;*/
 		 
-		
 	}
 	.swiper-slide{
 		/*background:#007AFF;*/

@@ -7,6 +7,8 @@ Vue.use(Vuex);
   
    Initialization.one=function(url,i){
 
+             var video_show = localStorage.video_show==1?false:true
+       
 	 	   	     var options = {
                 controls: true,
                 url:url,//http://og9dz2jqu.cvoda.com/Zmlyc3R2b2RiOm9jZWFucy0xLm1wNA==_q00000001.m3u8
@@ -14,27 +16,13 @@ Vue.use(Vuex);
                 preload:true,
                 stretching:"panscan",
                 poster:state.video_b_url,
-                autoplay: false // 如为 true，则视频将会自动播放
+                autoplay:true // 如为 true，则视频将会自动播放
                }
             
                var player = new QiniuPlayer('demo_video',options); 
-               
-               player.ready(function() {
-                     player.on('play', function() {
-                         
-                   });
-                 });
-        };       
-
-	 	   	Initialization.add = function(url){
-	 	   	    	  player.src({type:'video/mp4',src:'http://videos.cieo.com.cn/%E5%B0%8F%E7%8C%AA%E7%9B%96%E6%88%BF%E5%AD%90-video'});
-                player.autoplay(true);
-	 	   	}
-	 	   	       
-	 	   	      
-
-      
-
+        };     
+	 	   	Initialization.add = function(url){	}
+	 	   	    	
 const state = {
 	urls:'http://video.cieo.com.cn/',//全局请求头
 	
