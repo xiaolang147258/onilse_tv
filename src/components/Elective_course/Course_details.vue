@@ -189,6 +189,7 @@ import router from '../../router/index.js'
 import axios from 'axios'
 import Message from 'muse-ui-message';
 
+
 export default {
   data () {
     return{
@@ -284,7 +285,6 @@ export default {
             }).then(res=>{
             	      console.log(res.data)
                     if(res.data.code==200){
-                    	  
                     	   this.$toast.success({
   		   	     	          message:'评论提交成功，审核通过后将会展示，非常感谢！',
   		   	     	          time:'4000'
