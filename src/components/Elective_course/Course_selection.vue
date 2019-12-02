@@ -8,23 +8,24 @@
    
     <div v-show="showss_s" style="position:fixed; width:100%; height:100%;top: 0;left: 0;z-index:500;"></div>
     
-<!--顶部导航滑动区---------------------------------------------------------------------------------------------------> 
-    <div id="tit_box">
+<!---顶部导航滑动区--> 
+   <div id="tit_box">
       <div id="titles">
-      	 <van-tabs @click='tab_click' style=''>
-                <van-tab v-for='(i,index) in tab_act' :key="index"  :title="i.title" ></van-tab>
+      	 <!-- <van-tabs @click='tab_click' style=''> -->
+		 <van-tabs>
+                <van-tab v-for='(i,index) in 5' :key="index"  title="标签" ></van-tab>
          </van-tabs>
       </div>
-    </div>   
+    </div>  
   <div v-if="tab_lei">    
-<!--轮播区域---------------------------------------------------------------------------------------------------->  
+<!--轮播区域-->
     <mu-scale-transition> 
      <div v-show="showss" style="width:100%;height:5.066666rem;position: relative;">
       	  <!--<div class="swiper-container">-->
           	  <!--<div class="swiper-wrapper">-->
           	  	
               	 <swiper :options="swiperOption">
-              	 	<div v-for="(i,index) in swiper_act" @click="to_click(i)" style="width:7.866666rem;height: 4.53rem;overflow:hidden;" class="swiper-slide">
+              	 	<div v-for="(i,index) in 5" @click="to_click(i)" style="width:7.866666rem;height: 4.53rem;overflow:hidden;" class="swiper-slide">
               	  	 
               	  	 <div v-show="img_shows==false" id="login_box">
       	 	               <img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
@@ -32,21 +33,24 @@
               	  	 
               	  	 <mu-scale-transition> 
               	  	   <div v-show="img_shows" style="width: 100%;height: 100%;">
-              	  	   	   <img @load="img_shows=true" :src="i.pic" alt="" />
+              	  	   	   <img @load="img_shows=true" :src="urlsa" />
+						   
               	  	   </div>
               	      </mu-scale-transition>
               	  </div>
               	  </swiper>
-           	<!--</div>-->
-      	  <!--</div>-->
-      	  <div style="margin: auto;" v-show="tab_lei">
-      	      <a><div class="swiper-pagination"></div></a>
-         </div>
+           	<!-- </div> -->
+      	  <!-- </div> -->
+      	  <!-- <div style="margin: auto;" v-show="tab_lei"> -->
+      	      <!-- <a> -->
+				  <div class="swiper-pagination"></div>
+				  <!-- </a> -->
+         <!-- </div> -->
       	  </div>
      </mu-scale-transition> 	  
 <!------------------------------------------------------------------------------------------------------>       
 
-    <v-touch v-on:swipeleft="leftChangeImg('左')" v-on:swiperight="leftChangeImg('右')"> 
+    <!-- <v-touch v-on:swipeleft="leftChangeImg('左')" v-on:swiperight="leftChangeImg('右')"> -->
       <div class="tabs_box" id="tabs_boxs">
       	   <div class="tabs_top">
       	   	   <p class="tabs_top_p_left">精选内容</p>
@@ -55,7 +59,7 @@
       	   </div>
         <!--<mu-scale-transition>-->    
           
-      	   <div  class="tabs_title" v-for="(i,index) in jin_act">
+      	   <div  class="tabs_title" v-for="(i,index) in 5">
       	   	     <div  class="tabs_title_img" >
       	   	     	 <div v-show="img_shows==false" id="login_box" style="margin:0.5rem auto;">
       	 	               <img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
@@ -63,14 +67,14 @@
       	   	     	
       	   	     	<mu-scale-transition>
       	   	     	  <div v-show="img_shows" style="width: 100%;height: 100%;">
-      	   	     		  <img  :src="i.pic" alt="" />
+      	   	     		  <img  :src="urlsa"/>
       	   	     	  </div>
       	   	     	</mu-scale-transition>  
       	   	     </div>
       	   	  
       	   	   <div class="tabs_title_titles">
-      	   	   	     <p class="tabs_title_titles_p1">{{i.title}}</p>
-      	   	   	     <p class="tabs_title_titles_p2">{{i.synopsis}}</p>
+      	   	   	     <p class="tabs_title_titles_p1">{{'标题'}}</p>
+      	   	   	     <p class="tabs_title_titles_p2">{{'这是是简介'}}</p>
       	   	   	    <p style="margin-top:0.4rem;height:0.4rem;line-height:0.43rem;"><img class="tabs_title_titles_p_img" src="static/img/bofng.png"/>
       	   	   	        <a class="tabs_title_titles_p_a">{{i.seenum}}</a>
       	   	   	    </p>
@@ -80,7 +84,7 @@
       	 
       	<!--</mu-scale-transition>--> 
       </div>
-     </v-touch>    
+     <!-- </v-touch>    -->
     </div>
   
     <div v-else>
@@ -142,6 +146,8 @@ export default{
 	
   data(){
     return {
+		   urlsa:'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2752453349,2871240348&fm=26&gp=0.jpg',
+		
     	   tab_lei:true,
     	   jin_act:[],//精选数据列表
     	   tab_act:[],//导航栏数据
@@ -163,7 +169,7 @@ export default{
        	   stopOnLastSlide: false,
        	   disableOnInteraction: true,
        	  },
-		   	  loop:true,
+		   	  loop:false,
             effect :'coverflow',
               slidesPerView:1.2,
               centeredSlides:true,
@@ -176,6 +182,7 @@ export default{
             },
             observer:true,//修改swiper自己或子元素时，自动初始化swiper
             observeParents:true,//修改swiper的父元素时，自动初始化swiper
+			
     	   },
     	   
     }
@@ -256,7 +263,7 @@ export default{
 //		 router.push({
 //	   	     path:'./Course_details',
 //	   	})
-        window.location.href = i.url
+        // window.location.href = i.url
   	},
   	go_det(i){
   		  localStorage.video_id = i.id

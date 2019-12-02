@@ -4,9 +4,9 @@
       	 <p>头像</p>
       	 <div class="Avatar_box">
       	 	<img :src="git_img" alt="" /> 
-      	 	<!--<van-uploader class='inp' :after-read="onRead">
+      	 	<van-uploader class='inp' :after-read="onRead">
                 <van-icon name="photograph"/>
-            </van-uploader>-->
+            </van-uploader>
       	 </div>
       </div>
       

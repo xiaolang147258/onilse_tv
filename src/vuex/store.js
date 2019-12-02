@@ -11,11 +11,11 @@ Vue.use(Vuex);
        
 	 	   	     var options = {
                 controls: true,
-                url:url,//http://og9dz2jqu.cvoda.com/Zmlyc3R2b2RiOm9jZWFucy0xLm1wNA==_q00000001.m3u8
+                url:'http://demo-videos.qnsdk.com/movies/qiniu.mp4',//http://og9dz2jqu.cvoda.com/Zmlyc3R2b2RiOm9jZWFucy0xLm1wNA==_q00000001.m3u8
                 type:'video/mp4',
                 preload:true,
                 stretching:"panscan",
-                poster:state.video_b_url,
+                // poster:state.video_b_url,
                 autoplay:true // 如为 true，则视频将会自动播放
                }
             

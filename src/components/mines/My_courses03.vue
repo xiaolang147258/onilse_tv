@@ -2,7 +2,7 @@
   <!--我的课程-->
   <div id="hello" style="width:100%;background:white;padding-top:0.133333rem;">
      <!--没有课程时展示--> 
-       <div v-if="ke_act.length==0" class="mei_box">
+       <div v-if="true" class="mei_box">
        	   <img src="../../../static/img/meiyoukecheng.png" alt="" />
        	   <div class="p_boxa">暂时没发现课程哦~去首页看看有什么课程吧</div>
            <div @click="go_home" class="btn">去看看</div>                 

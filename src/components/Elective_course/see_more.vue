@@ -1,29 +1,33 @@
 <template>
 	<!--点击查看更多 --课程列表页面-->
   <div id="hello" style="width:100%;background:white;float: left;">
-  	  <mu-scale-transition>
-  	  <div v-for="(i,index) in active" v-show="dal">
-      <div  class="titles" >
-      	
+  	  <!-- <mu-scale-transition> -->
+		  
+		  
+  	  <div v-for="(i,index) in 4" v-show="dal">
+	   <mu-scale-transition>
+      <div v-show="img_shows" class="titles" >
       	 <div v-show="img_shows==false" id="login_box">
       	 	<img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
       	 </div>
-      	 <!--<mu-scale-transition>--> 
+      	 
       	    <div v-show="img_shows" style="width: 100%;height: 100%;">
-      	       <img @load="img_shows=true" class="titles_img" :src="i.pic" alt="" />
+      	       <img @load="img_shows=true" class="titles_img" src="http://img3.imgtn.bdimg.com/it/u=1206232608,432063717&fm=26&gp=0.jpg" alt="" />
       	    </div>
-      	 <!--</mu-scale-transition>-->
       	 
       	  <div class="titles_val_box">
-      	  	 <img :src="i.pic" alt="" />  
+      	  	 <img src="http://img3.imgtn.bdimg.com/it/u=1206232608,432063717&fm=26&gp=0.jpg" alt="" />  
       	  	 <div class="titles_val_box_box">
-      	  	 	 <p>{{i.title}}</p>
+      	  	 	 <p>{{'标题内容'}}</p>
       	  	 	 <div @click="to_Course_details(i)" class="titles_val_box_box_btn">去学习</div>
       	  	 </div>
       	  </div>
       </div>
-     </div> 
-     </mu-scale-transition>
+	  </mu-scale-transition>
+     </div>
+	 
+	 
+     <!-- </mu-scale-transition> -->
      
      <div v-show="active.length>6" style="float: left;margin-top:0.4rem;width:100%;height:0.906666rem;background:#F0F0F0;text-align:center;line-height:0.906rem;font-size:0.32rem;color:#999999">
       	 已经是最底部了~
@@ -41,7 +45,7 @@ export default {
   data (){
     return{
     	active:[],
-    	dal:false,
+    	dal:true,
     	img_shows:false,
     }
   },

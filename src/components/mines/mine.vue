@@ -41,11 +41,11 @@
         	   </div>  
         </div>
         
-        <!--<div class="options"><div @click="to_coupon04" class="options_c">
+        <div class="options"><div @click="to_coupon04" class="options_c">
         	 	    <img src="../../../static/img/youhuiquan.png" alt="" />
         	 	    <p>优惠券</p>
         	      <van-icon size='0.466666rem' color='#6E4C45' name="arrow" />
-        </div></div>-->
+        </div></div>
         
         <div class="options"><div @click="to_my_collection05" class="options_c">
         	 	    <img id="shou" src="../../../static/img/wodeshoucahng (1).png" alt="" />

@@ -10,17 +10,19 @@
           	</div>
     </mu-fade-transition>-->
   	 
-     <div v-if="loading" class="top_title">{{actives.group.title}}</div>
+     <div v-if="loading" class="top_title">{{'标题'}}</div>
 
 <!--腾讯视频播放器-------------------------------------------------------------------------------------------------------------------------->   
     <div id="video_box" style="position: relative;">
-    	 <img v-if="loading" id="tv_background" style="position: absolute;top: 0;left:0;z-index:-1;width:100%;height:100%;" :src="actives.group.pic?actives.group.pic:''" alt="" />
+    	 <!-- <img v-if="loading" id="tv_background" style="position: absolute;top: 0;left:0;z-index:-1;width:100%;height:100%;" :src="'http://img4.imgtn.bdimg.com/it/u=1290818963,1280501057&fm=26&gp=0.jpg'" alt="" /> -->
      <!--腾讯播放器-------------------------------------------------------------------> 
     	 <!--<div id="videoCon" class="video"></div>-->
      <!--七牛云播放器------------------------------------------------------------------> 	 
-    	 <video autoplay="autoplay" v-show="vid!=''" id="demo_video" onended="document.getElementById('video_ss').style.display='block'" class="video-js vjs-big-play-centered"></video>
-       
-       <div v-if="loading" id="video_ss">
+    	 <!-- <video autoplay="autoplay" id="demo_video" onended="document.getElementById('video_ss').style.display='block'" class="video-js vjs-big-play-centered"></video> -->
+          
+		<video class="video_s" ref="video" controls="controls" src="http://demo-videos.qnsdk.com/movies/qiniu.mp4" webkit-playsinline='true' playsinline='true'></video> 
+		  
+       <!-- <div v-if="loading" id="video_ss">
        	  <div  v-if="chak_to">
        	    <p style="color:#FFFFFF;font-size:0.373333rem;">本课程你已经看完了，是否需要查看其它课程？</p>  
        	    <div @click="go_home" class="video_btn_c">返回首页</div>
@@ -29,7 +31,7 @@
        	   <p style="color:#FFFFFF;font-size:0.373333rem;">本节课已经观看完毕，是否观看下一节课？</p>  
     	 	   <div @click="next_set" class="video_btn_c">下一集</div>
           </div>
-        </div>
+        </div> -->
        
      <!--视频播放器---------------------------------------------------------------------------------------------------------------------------->    	 
      <!--<div id="tv_box">
@@ -39,32 +41,32 @@
      	</div>
      </div>-->
      
-    	 <div v-show="vid==''" id="video_btn">
+    	 <!-- <div v-show="vid==''" id="video_btn">
     	 	 <div v-if="loading">
     	 	  <p v-if="actives.node[0].status==1" style="color:#FFFFFF;font-size:0.373333rem;">该课程需要付费，如需观看请购买课程</p> 
     	 	  <p v-else style="color:#FFFFFF;font-size:0.373333rem;">该课节需要付费，如需观看请购买完整课程</p> 
     	 	  <div @click="to_buy" class="video_btn_c">去购买</div>
     	 	 </div> 
-    	 </div>
+    	 </div> -->
     </div>
-<!------------------------------------------------------------------------------------------------------------------------------------->    
+<!---->    
     <div v-if="loading">
-<!------------------------------------------------------------------------------------------------------------------------------------->
+<!---->
      <div @click="to_tv" class="tv_box_bto1">
-     	  <p class="tv_box_bto1_p1">¥{{actives.group.price}}</p>
+     	  <p class="tv_box_bto1_p1">¥{{500}}</p>
      	  <div class="tv_box_bto2"> 
      	  	   
-     	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=1" class="tv_box_bto2_img"><img :src="actives.group.buyusers?actives.group.buyusers[0]:''" alt="" /></div>
+     	  	   <!-- <div v-show="actives.group.buynum!=0&&actives.group.buynum>=1" class="tv_box_bto2_img"><img :src="actives.group.buyusers?actives.group.buyusers[0]:''" alt="" /></div>
      	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=2" style="z-index:2;right:2.786666rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[1]:''" alt="" /></div>
      	  	   <div v-show="actives.group.buynum!=0&&actives.group.buynum>=3" style="z-index:1;right:2.333333rem;" class="tv_box_bto2_img"><img  :src="actives.group.buyusers?actives.group.buyusers[2]:''" alt="" /></div>
-     	  	   
-     	  	   <p class="tv_box_bto2_p">{{actives.group.buynum}}<a style="color: #C5B2AB;">人已购买</a></p>
+     	  	   -->
+     	  	   <p class="tv_box_bto2_p">{{'0'}}<a style="color: #C5B2AB;">人已购买</a></p>
      	  	   
      	  </div>
      </div>
      
      <div class="to_tv_numder">
-     	    <p class="to_tv_numder_p">{{actives.node.length}}课节 | {{actives.group.adaptcrowd}}岁</p>
+     	    <p class="to_tv_numder_p">{{10}}课节 | {{10}}岁</p>
      	    <div class="to_tv_numder_btn"><van-icon class='dou' name="info-o"/>&nbsp;服务说明</div>
      </div>
      
@@ -74,68 +76,71 @@
     	   <div @click="tvboxclick(3)" style="float:right;" class="tv_box_tab_tit">用户评价</div>
     </div>
      
-<!--课程详情------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<!--课程详情-->
     
-    <div v-html="actives.group.details" id="aws1" class="awsaa"></div>
+    <div id="aws1" class="awsaa">
+		课程详情
+		课程详情
+	</div>
     	   
-<!--课程目录------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->     
+<!--课程目录-->     
     <div id="aws2">
     	   <div class="aws2_title">
+			   
     	   	     课程目录<div class="aws2_title_div"></div>
     	   </div>
     	   <div class="aws2_title_2"></div>
-    	<!----------------------------------------------------------------------------------------->   
-    	   <div v-for="(i,index) in actives.node" @click="aws_tabsclick(i,index)" class="aws_tabs">
-    	   	     <p class="aws_tabs_p1" :class="{tv_box_tab_tits:adl==index}">【{{i.status==2||vip_id==1?'免费':'收费'}}】{{i.title}}>
+    	<!---->   
+   	   <div v-for="(i,index) in 10" @click="aws_tabsclick(i,index)" class="aws_tabs">
+    	   	     <!-- <p class="aws_tabs_p1" class="tv_box_tab_tits">【{{'免费'}}】{{'标题'}}</p> -->
+				 <p class="aws_tabs_p1">【{{'免费'}}】{{'标题'}}</p>
     	   	     <div v-if="adl==index"  class="aws_tabs_btn">正在播放&nbsp;<van-icon name="play" /></div>
     	   	     <p v-else class="aws_tabs_p2">50：53</p>
     	   </div>
     </div>
      
-<!--用户评价------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->     
-    <div id="aws3">
+<!--用户评价-->     
+    <!-- <div id="aws3">
     	  <div class="aws2_title" style="margin-bottom:0.453333rem;">
     	   	  <p class="aws2_title_p1">课程评价</p><div class="aws2_title_div"></div>
     	   	  <p class="aws2_title_p">(累计<a>{{actives.group.count}}</a>条)</p>
     	  </div>
-    	   <div v-for="(i,index) in actives.comment" class="aws_pin_tab">
+    	   <div v-for="(i,index) in 5" class="aws_pin_tab">
     	   	    <div class="aws_pin_tab_a">
-    	   	    	   <p class="aws_pin_tab_a_name">{{i.nickname}}</p><p class="aws_pin_tab_a_date">{{i.created_at}}</p>
+    	   	    	   <p class="aws_pin_tab_a_name">用户</p><p class="aws_pin_tab_a_date">内容</p>
     	   	    	   <a class="aws_pin_tab_a_a"><van-rate v-model="i.score" :size='15' disabled disabled-color='#FEE045' /></a>
     	   	    </div> 
     	   	    <div class="aws_pin_values">
     	   	    	   {{i.content}}
-    	   	    </div> 
+    	   	    </div>
     	   </div>
-    </div>
-    <div style="width: 100%;display:inline-block;">
-        <div @click="git_commit" class="logins">{{actives.comment.length==0?'暂时没有评论':btn_val}}</div>  
-    </div>
-<!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->  
-<mu-scale-transition>
+    </div> -->
+    <!-- <div style="width: 100%;display:inline-block;">
+        <div @click="git_commit" class="logins">{{'暂时没有评论'}}</div>  
+    </div> -->
+<!---->  
+<mu-scale-transition> -->
   <img v-show="to_top_show" @click="to_top" class="ding" src="static/img/zhiding.png" alt="" />
 </mu-scale-transition>
 
-<!--底部购买||评论栏----------------------------------------------------------------------------------------------------->     
+<!--底部购买||评论栏     
   <!--用户购买后展示--> 
-   <div v-if="Whether_to_buy||vip_id==1" @touchmove.prevent class="pin_btn">
-   	 <!--<div v-if="true" @touchmove.prevent class="pin_btn">-->
-   	 	  
+   <div v-if="true" @touchmove.prevent class="pin_btn">
     	   <a href="tel:18924319390">
     	   <div class="pin_btn_zi">
     	   	   <img src="static/img/xixun.png" alt="" />
     	   	   <p>咨询</p> 
     	   </div>
     	  </a>
-    	  
     	   <div class="pin_btn_zi">
     	   	   <img @click="cherk_click" :src="check?'static/img/yishoucahng.png':'static/img/shoucahng.png'" alt="" />
     	   	   <p>收藏</p>
     	   </div>	   
     	   <div @click="pinss" class="right_btn">发表评论</div>
     </div>
+	
   <!--用户未购买时展示-->  
-    <div v-else @touchmove.prevent class="pin_btn">
+    <!-- <div v-else @touchmove.prevent class="pin_btn">
     	  <a href="tel:18924319390">
     	   <div class="pin_btn_zi">
     	   	   <img src="static/img/xixun.png" alt="" />
@@ -148,11 +153,10 @@
     	   </div>	  
     	   <div @click="to_buy" class="right_btn">立即购买</div>
     	   <p class="right_btn_rmb">¥{{actives.group.price}}</p>
-    </div>
-<!------------------------------------------------------------------------------------------------------------------>    
+    </div> -->
+<!---->    
       
-    
-<!--弹出评论组件-------------------------------------------------------------------------------------------------------->
+<!--弹出评论组件-->
     <mu-fade-transition>
         <div class="meng" v-show="show1" @click="show1=false">
         	<div style="width:8.466666rem;height:100%;margin: 0 auto;position: relative;">
@@ -174,9 +178,7 @@
            </div>
         </div>
      </mu-fade-transition>
-    
     </div>
-    
     
   </div>
 </template>
@@ -229,7 +231,7 @@ export default {
 //  },
     
   
-    loading:false,
+    loading:true,
     
     Whether_to_buy:false,
     
@@ -625,8 +627,8 @@ handleScroll(){//监测滑动
   },
   
   mounted(){
-  	  this.git_active()//获取数据
-  	  this.tv_git()//初始化播放器
+  	  // this.git_active()//获取数据
+  	  // this.tv_git()//初始化播放器
   	 
   	  store.state.btn_show = false;
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';
@@ -637,7 +639,7 @@ handleScroll(){//监测滑动
         console.log(this.aws2_index);
 
       if(localStorage.video_show=='true'){
-      	   location.reload();
+      	   // location.reload();
       	   localStorage.index = 0;
       	   localStorage.video_show='false'
        }
@@ -674,7 +676,15 @@ handleScroll(){//监测滑动
 </script>
 
 <style scoped>
-	
+	.video_s{
+		width: 100%;
+		height: 100%;
+		margin: auto;
+		background:url('http://img0.imgtn.bdimg.com/it/u=3268705469,2646819851&fm=26&gp=0.jpg');
+		background-size:100% 100%;background-repeat:no-repeat;
+		/* border-radius: 0.266666rem; */
+		overflow: hidden;
+	}
 	.MsoNormal,td{
 		 width: 100%;
 	}

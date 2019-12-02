@@ -4,11 +4,15 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import MuseUI from '_muse-ui@3.0.1@muse-ui';
+// import MuseUI from 'muse-ui';
+// import 'muse-ui/dist/muse-ui.css';
+// Vue.use(MuseUI);
+
+import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 Vue.use(MuseUI)
 
-import Message from '_muse-ui@3.0.1@muse-ui';
+import Message from 'muse-ui';
 Vue.use(Message);
 
 import Toast from 'muse-ui-toast';
@@ -26,6 +30,7 @@ import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
 import Loading from 'muse-ui-loading/dist/muse-ui-loading.js';
 Vue.use(Loading);
 
+
 import 'vant/lib/index.css';
 import { Tab, Tabs } from 'vant';
 Vue.use(Tab).use(Tabs);
@@ -33,8 +38,8 @@ Vue.use(Tab).use(Tabs);
 import { Uploader} from 'vant';
 Vue.use(Uploader);
 
-import VueTouch from 'vue-touch'
-Vue.use(VueTouch, {name: 'v-touch'})
+// import VueTouch from 'vue-touch'
+// Vue.use(VueTouch, {name: 'v-touch'})
 
 import axios from 'axios'
 Vue.prototype.axios = axios;

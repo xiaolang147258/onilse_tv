@@ -2,7 +2,7 @@
   <!--我的收藏-->
   <div id="hello" style="width:100%;background:white;padding-top:0.133333rem;">
      <!--没有课程时展示--> 
-       <div v-if="act_show" class="mei_box">
+       <div v-if="true" class="mei_box">
        	   <img src="../../../static/img/xiaoxingxing.png" alt="" />
        	   <div class="p_boxa">暂时没发现收藏哦~去首页看看有什么课程吧</div>
            <div @click="go_home" class="btn">去看看</div>                 

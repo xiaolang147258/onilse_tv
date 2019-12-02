@@ -7,7 +7,7 @@
        	   <div @click="tab_click(2,'nonEvalua')" class="top_tab_c" :class="{top_tab_color:tab_show==2}" style="margin-left:1.64rem;">待评价<div v-show="tab_show==2" class="top_tab_c_box"></div></div>
        </div>
     <!--没有订单时展示-->
-       <div v-if="act_show" class="mei_box">
+       <div v-if="true" class="mei_box">
        	   <img src="../../../static/img/wodedindan.png" alt="" />
        	   <div class="p_boxa">暂时没发现订单哦~去首页看看有什么课程吧</div>
            <div @click="go_home" class="btn">去看看</div>                 
