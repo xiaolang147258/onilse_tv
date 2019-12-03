@@ -7,9 +7,9 @@
   	  <div v-for="(i,index) in 4" v-show="dal">
 	   <mu-scale-transition>
       <div v-show="img_shows" class="titles" >
-      	 <div v-show="img_shows==false" id="login_box">
+      	 <!-- <div v-show="img_shows==false" id="login_box">
       	 	<img src="../../../static/img/gif/5-121204193R5-50.gif" alt="" />
-      	 </div>
+      	 </div> -->
       	 
       	    <div v-show="img_shows" style="width: 100%;height: 100%;">
       	       <img @load="img_shows=true" class="titles_img" src="http://img3.imgtn.bdimg.com/it/u=1206232608,432063717&fm=26&gp=0.jpg" alt="" />
