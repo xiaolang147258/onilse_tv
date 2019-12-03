@@ -17,7 +17,7 @@
        	    
        	    <div class="box" v-for="i in 3">
        	    	 <div class="boxs1">
-       	    	 	<img :src="tab_show==0?'../../../static/img/youhui_c.png':'../../../static/img/youhui_a.png'"/> 
+       	    	 	<img :src="tab_show==0?'./static/img/youhui_c.png':'./static/img/youhui_a.png'"/> 
        	    	 	 <div class="boxs1_c">
        	    	 		 <p>限时立减券</p>
        	    	 		 <a>有限日期：2019-12-10</a>
