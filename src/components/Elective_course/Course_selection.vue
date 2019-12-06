@@ -425,7 +425,7 @@ export default{
 //    if(localStorage.api_token1&&localStorage.api_token1!=''){
 //    	  console.log(localStorage);
 //    }else{
-      	  this.login_ae();
+      	  // this.login_ae();
 //    }
       
       this.showss_s = true;
