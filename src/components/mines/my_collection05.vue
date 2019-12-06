@@ -82,7 +82,7 @@ export default {
   	  
   },
   mounted(){
-  	   this.git_act()
+  	   // this.git_act()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  localStorage.video_show='true'

@@ -275,7 +275,7 @@ export default {
    },
   },
   mounted(){
-  	  this.get_index();
+  	  // this.get_index();
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine';
 //	  document.getElementById('hello').style.height = document.documentElement.clientHeight+'px';

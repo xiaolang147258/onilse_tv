@@ -89,7 +89,7 @@ export default {
   },
   mounted(){
   	   localStorage.video_show='true'
-  	   this.git_ding()
+  	   // this.git_ding()
   	   $("html, body").animate({scrollTop:0});//回顶部
   	  store.state.btn_show = false;
   	  store.state.bottom = 'mine'
